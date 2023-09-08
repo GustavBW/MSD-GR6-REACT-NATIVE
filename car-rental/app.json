@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "car-rental-app",
-    "slug": "car-rental-app",
+    "name": "car-rental",
+    "slug": "car-rental",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
