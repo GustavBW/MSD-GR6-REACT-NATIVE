@@ -4,20 +4,129 @@ const port = 3000
 
 app.get('/car-data', (req, res) => {
   res.send(`
-    [
+      [
         {
-            "name": "BWV",
-            "price": 1000000
+            "model": "Tesla Model S",
+            "manufacturer": "Tesla",
+            "year": 2022,
+            "weightKg": 2100.7,
+            "dkkPrKm": 0.35,
+            "dimensions": [4979, 1964, 1445],
+            "lat": 34.0522,
+            "lon": -118.2437,
+            "available": true,
+            "id": 1001
         },
         {
-            "name": "BMW",
-            "price": 2000000
+            "model": "Nissan Ariya",
+            "manufacturer": "Nissan",
+            "year": 2023,
+            "weightKg": 1800.2,
+            "dkkPrKm": 0.28,
+            "dimensions": [4680, 1858, 1665],
+            "lat": 40.7128,
+            "lon": -74.0060,
+            "available": true,
+            "id": 1002
         },
         {
-            "name": "Benz",
-            "price": 3000000
+            "model": "Chevrolet Bolt EUV",
+            "manufacturer": "Chevrolet",
+            "year": 2023,
+            "weightKg": 1750.5,
+            "dkkPrKm": 0.32,
+            "dimensions": [4166, 1766, 1614],
+            "lat": 37.7749,
+            "lon": -122.4194,
+            "available": false,
+            "id": 1003
+        },
+        {
+            "model": "Ford Mustang Mach-E",
+            "manufacturer": "Ford",
+            "year": 2023,
+            "weightKg": 1980.3,
+            "dkkPrKm": 0.31,
+            "dimensions": [4748, 1881, 1600],
+            "lat": 34.0522,
+            "lon": -118.2437,
+            "available": true,
+            "id": 1004
+        },
+        {
+            "model": "Volkswagen ID.4",
+            "manufacturer": "Volkswagen",
+            "year": 2022,
+            "weightKg": 1850.6,
+            "dkkPrKm": 0.29,
+            "dimensions": [4584, 1852, 1640],
+            "lat": 40.7128,
+            "lon": -74.0060,
+            "available": true,
+            "id": 1005
+        },
+        {
+            "model": "BMW i3",
+            "manufacturer": "BMW",
+            "year": 2022,
+            "weightKg": 1245.8,
+            "dkkPrKm": 0.24,
+            "dimensions": [3999, 1775, 1578],
+            "lat": 37.7749,
+            "lon": -122.4194,
+            "available": false,
+            "id": 1006
+        },
+        {
+            "model": "Audi e-tron",
+            "manufacturer": "Audi",
+            "year": 2023,
+            "weightKg": 2300.4,
+            "dkkPrKm": 0.37,
+            "dimensions": [4901, 1935, 1616],
+            "lat": 34.0522,
+            "lon": -118.2437,
+            "available": true,
+            "id": 1007
+        },
+        {
+            "model": "Hyundai Kona Electric",
+            "manufacturer": "Hyundai",
+            "year": 2023,
+            "weightKg": 1675.9,
+            "dkkPrKm": 0.26,
+            "dimensions": [4180, 1800, 1570],
+            "lat": 40.7128,
+            "lon": -74.0060,
+            "available": true,
+            "id": 1008
+        },
+        {
+            "model": "Kia Soul EV",
+            "manufacturer": "Kia",
+            "year": 2023,
+            "weightKg": 1620.2,
+            "dkkPrKm": 0.27,
+            "dimensions": [4195, 1800, 1600],
+            "lat": 37.7749,
+            "lon": -122.4194,
+            "available": false,
+            "id": 1009
+        },
+        {
+            "model": "Jaguar I-PACE",
+            "manufacturer": "Jaguar",
+            "year": 2022,
+            "weightKg": 2135.6,
+            "dkkPrKm": 0.36,
+            "dimensions": [4682, 2139, 1565],
+            "lat": 34.0522,
+            "lon": -118.2437,
+            "available": true,
+            "id": 1010
         }
     ]
+
   `)
 })
 
