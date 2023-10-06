@@ -14,6 +14,7 @@ export default function App() {
 
   React.useEffect(() => {
     //Check local storage first, else:
+    
     fetch('https://localhost:3000/car-data')
     .catch(err => {
       console.log("Networking error: \n"+err);
@@ -37,7 +38,7 @@ export default function App() {
     setDialog(view);
     setBlurPage(<BlurPage />);
   }
-  
+
   const [currentView, setCurrentView] = useState<JSX.Element>(<Home setPage={setPage} setPopUp={setPopUp}/>);
 
   return (
