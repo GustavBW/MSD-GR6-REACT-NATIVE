@@ -2,12 +2,15 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { Car } from './src/ts/types';
+import BlurPage from './src/components/BlurPage';
+import Home from './src/pages/Home';
 
 export default function App() {
-  const [clickCount,setClickCount] = useState(0);
   //show loading spinner on null
   const [carData, setCarData] = useState<Car[] | null>(null);
   const [networkError, setNetworkError] = useState<Error | null>(null);
+  const [blurPage, setBlurPage] = useState<JSX.Element>(<></>);
+  const [popUp, setDialog] = useState<JSX.Element>(<></>);
 
   React.useEffect(() => {
     //Check local storage first, else:
@@ -20,14 +23,28 @@ export default function App() {
     .then(data => setCarData(data as Car[]));
   })
 
+  const setPage = (view: JSX.Element) => {
+      //Delegating helper methods 
+      if(view != currentView){
+        setBlurPage(<></>);
+        setDialog(<></>);
+      }
+      setCurrentView(view);
+  }
+
+  const setPopUp = (view: JSX.Element) => {
+    //Delegating helper methods 
+    setDialog(view);
+    setBlurPage(<BlurPage />);
+  }
+  
+  const [currentView, setCurrentView] = useState<JSX.Element>(<Home setPage={setPage} setPopUp={setPopUp}/>);
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-      <Button onPress={()=>setClickCount(clickCount+1)} title={clickCount+''}></Button>
-      
-
+      {currentView}
+      {blurPage}
+      {popUp}
     </View>
   );
 
