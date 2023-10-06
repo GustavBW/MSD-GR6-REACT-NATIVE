@@ -4,6 +4,7 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { Car } from './src/ts/types';
 import BlurPage from './src/components/BlurPage';
 import Home from './src/pages/Home';
+import storage from './src/ts/storage';
 
 export default function App() {
   //show loading spinner on null
@@ -14,15 +15,23 @@ export default function App() {
 
   React.useEffect(() => {
     //Check local storage first, else:
+    storage.getAllDataForKey('car-data').then(existingCarData => {
+      if(existingCarData.length > 0){
+        setCarData(existingCarData as unknown as Car[]);
+        return;
+      }else{
+        fetch('https://localhost:3000/car-data')
+        .catch(err => {
+          console.log("Networking error: \n"+err);
+          setNetworkError(err);
+        })
+        .then(res => res?.json())
+        .catch(err => console.log("Data formatting error: \n"+err))
+        .then(data => setCarData(data as Car[]));
+      }
+    })
     
-    fetch('https://localhost:3000/car-data')
-    .catch(err => {
-      console.log("Networking error: \n"+err);
-      setNetworkError(err);
-    }).then(res => res?.json())
-    .catch(err => console.log("Data formatting error: \n"+err))
-    .then(data => setCarData(data as Car[]));
-  })
+  },[]);
 
   const setPage = (view: JSX.Element) => {
       //Delegating helper methods 
