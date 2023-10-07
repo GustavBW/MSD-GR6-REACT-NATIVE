@@ -2,13 +2,16 @@ import React from 'react';
 import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import Map from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
-import { colorsHSL } from '../ts/styles';
-
+import { colors } from '../ts/styles';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faUser, faBars } from '@fortawesome/free-solid-svg-icons'
 
 export interface HomeProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
 }
+
+const iconSize = 40;
 
 export default function Home({setPage, setPopUp}: HomeProps){
     const [address, setAddress] = React.useState<string>("");
@@ -31,17 +34,21 @@ export default function Home({setPage, setPopUp}: HomeProps){
                     onPress={() => {
                         console.log("Showing menu")
                     }}
-                >Menu</Pressable>
+                >
+                    <FontAwesomeIcon icon={faBars} size={iconSize} color={colors.blueBase.hsl} />
+                </Pressable>
                 <TextInput
                     style={styles.input}
-                    placeholder="AddressBar"
+                    placeholder="University of Southern Denmark"
                     keyboardType="alphabetic"
                 />
                 <Pressable style={styles.iconButton}
                     onPress={() => {
                         console.log("Showing profile")
                     }}
-                >Profile</Pressable>
+                >                    
+                    <FontAwesomeIcon icon={faUser} size={iconSize} color={colors.blueBase.hsl} />
+                </Pressable>
             </View>
         </View>
     )
@@ -55,38 +62,44 @@ const styles = StyleSheet.create({
       overflow: 'hidden', // Prevent children from overflowing
     },
     mapView: {
-      flex: 1, // Takes up 80% of the screen height
       zIndex: 0,
-      width: "100%",
+      width: "100%"
     },
     lowerMenu: {
       position: "absolute",
       bottom: heightOfMenuPercent + "%",
       height: heightOfMenuPercent + "%",
-      flex: 0.2, // Takes up 20% of the screen height
+      display: 'flex', // Set display value to flex
       flexDirection: 'row', // Horizontal layout for the menu items
-      justifyContent: 'space-between', // Space evenly between menu items
+      justifyContent: 'space-evenly', // Space evenly between menu items
       alignItems: 'center', // Center items vertically
-      padding: 10, // Add padding for spacing
+    width: "100%",
       zIndex: 1,
-      backgroundColor: 'hsla(' + colorsHSL.blueBase.h + "," + colorsHSL.blueBase.s + "%," + colorsHSL.blueBase.l + "%, .5)", // Background color for the menu
+      backgroundColor: colors.blueDark.hsl,
     },
     iconButton: {
       flex: 1, // Each button takes up equal space horizontally
       justifyContent: 'center', // Center text vertically
       alignItems: 'center', // Center text horizontally
-      borderWidth: 1, // Add border for visual separation
-      borderColor: 'black', // Border color
-      borderRadius: 5, // Rounded corners for buttons
       marginHorizontal: 5, // Add horizontal margin between buttons
       paddingVertical: 10, // Vertical padding for buttons
+    },
+    icon: {
+        width: "100%",
+        height: "100%",
+        alignSelf: "center"
     },
     input: {
       flex: 2, // Takes up twice the space of the buttons
       paddingHorizontal: 10, // Add horizontal padding for the input
       borderWidth: 1, // Add border for the input
+      width: "90%",
+      height: "66%",
       borderColor: 'black', // Border color
-      borderRadius: 5, // Rounded corners for the input
+      borderRadius: 10, // Rounded corners for the input
+      backgroundColor: colors.blueBase.hsl, // White background for the input
+      textAlign: 'center', // Center text horizontally
+      textOverflow: 'ellipsis', // Ellipsis overflow for the input
     },
   });
   

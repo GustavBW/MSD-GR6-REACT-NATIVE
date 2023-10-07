@@ -10,6 +10,9 @@
     "ts:check": "tsc"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/react-native-fontawesome": "^0.3.0",
     "@react-native-async-storage/async-storage": "^1.19.3",
     "expo": "^49.0.13",
     "expo-status-bar": "~1.6.0",
@@ -18,7 +21,9 @@
     "react-dom": "18.2.0",
     "react-map-gl": "^7.1.6",
     "react-native": "0.72.4",
+    "react-native-fontawesome": "^7.0.0",
     "react-native-storage": "^0.2.4",
+    "react-native-svg": "^13.14.0",
     "react-native-web": "~0.19.6",
     "react-native-webview": "^13.6.2"
   },
