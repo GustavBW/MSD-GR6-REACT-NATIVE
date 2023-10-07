@@ -1,5 +1,6 @@
 export type Car = {
     model: string;
+    manufacturer: string;
     year: number;
     weightKg: number;
     dkkPrKm: number;

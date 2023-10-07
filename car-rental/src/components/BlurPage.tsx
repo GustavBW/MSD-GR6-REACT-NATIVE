@@ -5,14 +5,6 @@ import WebView from 'react-native-webview';
 export default function BlurPage(){
     return (
         <WebView
-            style={{ 
-                display: "absolute", 
-                top: 0, 
-                left: 0, 
-                right: 0, 
-                bottom: 0, 
-                backgroundColor: "transparent"
-            }}
             source={{ html: 
                 '<div style="' +
                 'position: absolute; top: 0; right:0; bottom: 0; left: 0;' +
