@@ -54,8 +54,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
             <View style={styles.lowerMenu}>
                 <Pressable style={styles.iconButton}
                     onPress={() => {
-                        console.log("Showing menu");
-                        setCurrentlyActive(Actives.menu);
+                        //setPopUp(<Menu setPopUp={setPopUp} setPage={setPage}/>)
                     }}
                 >
                     <FontAwesomeIcon icon={faBars} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
