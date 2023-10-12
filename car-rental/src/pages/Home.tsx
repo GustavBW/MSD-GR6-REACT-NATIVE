@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View } from 'react-native';
+import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View, Keyboard } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
 import { Car } from '../ts/types';
-import {Menu} from '../popups/Menu';
+import Login from '../popups/Login';
 
 export interface HomeProps {
     setPage: (view: JSX.Element) => void;
@@ -12,16 +12,8 @@ export interface HomeProps {
     cars: Car[];
 }
 
-enum Actives {
-    menu,
-    profile,
-    input,
-    neither
-}
-
-export default function Home({setPage, setPopUp, cars}: HomeProps){
+export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element {
     const [address, setAddress] = React.useState<string>("");
-    const [currentlyActive, setCurrentlyActive] = React.useState<Actives>(Actives.neither);
     const [carMarkers, setMarkers] = React.useState<JSX.Element[]>([]);
     const [inputFocused, setInputFocused] = React.useState<boolean>(false);
 
@@ -38,8 +30,23 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
         console.log("Markers updated, cars: ", cars, "markers: ", newMarkers)
     },[cars]);
 
+    const appendOutofBoundsPressCapture = (): JSX.Element => {
+        if(inputFocused){
+            return (
+                <Pressable style={{zIndex: 1, position: "absolute", width: "100%", height: "100%"}} 
+                    onPress={() => {
+                        setInputFocused(false);
+                        Keyboard.dismiss();
+                    }}
+                />
+            );
+        }
+        return (<></>);
+    }
+
     return (
         <SafeAreaView style={styles.homeContainer}>
+            {appendOutofBoundsPressCapture()}
             <Image source={require('./map.png')} 
                 style={styles.mapView}
                 resizeMode='cover'
@@ -48,16 +55,16 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
                 <Pressable style={styles.iconButton}
                     onPress={() => {
                         console.log("Showing menu");
-                        setPopUp(<Menu setPopUp={setPopUp} setPage={setPage}/>)
                         setCurrentlyActive(Actives.menu);
                     }}
                 >
                     <FontAwesomeIcon icon={faBars} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
                 </Pressable>
+
                 <TextInput
-                    style={ inputFocused ? {...styles.input,
-                        bottom: "100%",
-                        position: "relative"
+                    style={ inputFocused ? {
+                        ...styles.input,
+                        ...styles.inputWhenFocused
                     } : styles.input}
                     placeholder="University of Southern Denmark"
                     inputMode="text"
@@ -65,18 +72,15 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
                     onFocus={() => {
                         console.log("Showing input")
                         setInputFocused(true);
-                        setCurrentlyActive(Actives.input);
                     }}
                     onBlur={() => {
                         console.log("Hiding input")
                         setInputFocused(false);
-                        setCurrentlyActive(Actives.neither);
                     }}
                 />
                 <Pressable style={styles.iconButton}
                     onPress={() => {
-                        console.log("Showing profile")
-                        setCurrentlyActive(Actives.profile);
+                        setPopUp(<Login setPopUp={setPopUp} setPage={setPage}/>)
                     }}
                 >                    
                     <FontAwesomeIcon icon={faUser} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
@@ -133,7 +137,23 @@ const styles = StyleSheet.create({
       borderColor: 'black', // Border color
       borderRadius: StylingDefaults.borderRadius, // Rounded corners for the input
       backgroundColor: StylingDefaults.colors.blueBase.hsl, // White background for the input
-      textAlign: 'center' // Center text horizontally
+      textAlign: 'center', // Center text horizontally,
+      alignItems: 'center', // Center text vertically
     },
+    inputWhenFocused: {
+        zIndex: 2,
+        bottom: "100%",
+        shadowColor: StylingDefaults.colors.blueDark.hsl,
+        shadowOffset: {
+            width: 0,
+            height: 0
+        },
+        shadowOpacity: 1,
+        shadowRadius: 30,
+        elevation: 5,
+        backgroundColor: StylingDefaults.colors.blueBase.hsl,
+        width: "100%",
+        
+    }
   });
   
