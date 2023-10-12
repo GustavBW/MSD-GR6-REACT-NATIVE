@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DimensionValue, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
@@ -37,10 +37,9 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
     },[cars]);
 
     return (
-        <View style={styles.homeContainer}>
-            <Image source={{uri: "../../assets/map.png"}} 
+        <SafeAreaView style={styles.homeContainer}>
+            <Image source={require('./map.png')} 
                 style={styles.mapView}
-                resizeMode='cover'
             />
             <View style={styles.lowerMenu}>
                 <Pressable style={styles.iconButton}
@@ -74,7 +73,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
                     <FontAwesomeIcon icon={faUser} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
                 </Pressable>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -82,8 +81,7 @@ const heightOfMenuPercent = 5;
 
 const styles = StyleSheet.create({
     homeContainer: {
-      flex: 1,
-      overflow: 'hidden', // Prevent children from overflowing
+        flex: 1,
     },
     mapView: {
       zIndex: 0,

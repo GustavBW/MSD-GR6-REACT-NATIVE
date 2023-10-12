@@ -6,6 +6,7 @@ import BlurPage from './src/components/BlurPage';
 import Home from './src/pages/Home';
 import storage from './src/ts/storage';
 import { KnownKeys } from './src/ts/storage';
+import {StylingDefaults} from './src/ts/styles';
 import AllCars from './src/pages/AllCars';
 
 export default function App() {
@@ -58,7 +59,7 @@ export default function App() {
     setBlurPage(<BlurPage />);
   }
 
-  const [currentView, setCurrentView] = useState<JSX.Element>(<AllCars setPage={setPage} setPopUp={setPopUp} cars={carData}/>);
+  const [currentView, setCurrentView] = useState<JSX.Element>(<Home setPage={setPage} setPopUp={setPopUp} cars={carData}/>);
 
   return (
     <View style={styles.container}>
@@ -74,10 +75,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width:"100%",
-    height:"100%"
+    backgroundColor: StylingDefaults.colors.blueBase.hsl,
   },
 });
