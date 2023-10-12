@@ -1,5 +1,6 @@
 import React from "react";
-import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity } from "react-native"
+import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, TouchableOpacity } from "react-native"
+import { Button, Icon } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -14,10 +15,22 @@ export interface MenuProps {
 export function Menu({setPage, setPopUp}: MenuProps){
     return(
         <View>
-            <Modal animationType="slide">
-            <LinearGradient 
-                            colors={['#3498db', '#2ecc71']}
-                            style={styles.modal}>
+            <Modal animationType="slide" style={styles.container}>
+            <LinearGradient colors={['#3498db', '#2ecc71']} style={styles.modal}>
+                {/* Top row */}
+                <View style={styles.row}>
+                    <Button title="All Cars" buttonStyle={styles.button} />
+                    <Button title="Invoices" buttonStyle={styles.button} />
+                </View>
+                {/* Bottom row */}
+                <View style={styles.row}>
+                    <Button title="About" buttonStyle={styles.button} />
+                    <Button title="Support" buttonStyle={styles.button} />
+                </View>
+                {/* Circular "X" button in the top right corner */}
+                <View style={styles.closeButton}>
+                    <Icon name="close" type="font-awesome" color="white" size={30} />
+                </View>
             </LinearGradient>
             </Modal>
         </View>
@@ -26,10 +39,20 @@ export function Menu({setPage, setPopUp}: MenuProps){
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 20,
+      },
+      row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      },
+      closeButton: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+      },
     modal: {
         position: 'absolute',
         top: '30%', // Adjust the top position to make it smaller
@@ -37,7 +60,7 @@ const styles = StyleSheet.create({
         right: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 20,
+        padding:50,
         
         backgroundColor: 'transparent', // Set the background color to transparent
         borderRadius: 10,
@@ -51,22 +74,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     },
-    input: {
-      width: 300,
-      height: 40,
-      borderColor: 'gray',
-      borderRadius: 15,
-      borderWidth: 1,
-      marginBottom: 10,
-      padding: 8,
-      backgroundColor: 'white',
-      
-    },
-
     button: {
         width: 200,
-        height: 40,
-        backgroundColor: 'rgb(70,88,129)',
+        height: 200,
+        backgroundColor: 'transparent',
         borderRadius: 15,
         marginBottom: 10,
         padding: 8,
