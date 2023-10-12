@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
 import { Car } from '../ts/types';
 import Login from '../popups/Login';
+import { Menu } from '../popups/Menu';
 
 export interface HomeProps {
     setPage: (view: JSX.Element) => void;
@@ -54,7 +55,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
             <View style={styles.lowerMenu}>
                 <Pressable style={styles.iconButton}
                     onPress={() => {
-                        //setPopUp(<Menu setPopUp={setPopUp} setPage={setPage}/>)
+                        setPopUp(<Menu setPopUp={setPopUp} setPage={setPage}/>)
                     }}
                 >
                     <FontAwesomeIcon icon={faBars} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
