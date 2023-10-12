@@ -8,13 +8,14 @@ import storage from './src/ts/storage';
 import { KnownKeys } from './src/ts/storage';
 import {StylingDefaults} from './src/ts/styles';
 import AllCars from './src/pages/AllCars';
+import Login from './src/popups/Login';
 
 export default function App() {
   //show loading spinner on null
   const [carData, setCarData] = useState<Car[]>([]);
   const [networkError, setNetworkError] = useState<Error | null>(null);
   const [blurPage, setBlurPage] = useState<JSX.Element>(<></>);
-  const [popUp, setDialog] = useState<JSX.Element>(<></>);
+  const [popUp, setDialog] = useState<JSX.Element>(<Login></Login>);
 
   React.useEffect(() => {
     const doTheThing = async () => {
