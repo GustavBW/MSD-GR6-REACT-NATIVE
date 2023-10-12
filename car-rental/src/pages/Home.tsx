@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, DimensionValue, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import Map, {Marker} from 'react-map-gl';
-import mapboxgl from 'mapbox-gl';
+import { DimensionValue, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
@@ -28,15 +26,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
     const getCarMarker = (car: Car, key: number): JSX.Element => {
         console.log("Generating marker for car", car)
         return (
-            <Marker key={key} 
-                longitude={car.lon} 
-                latitude={car.lat} 
-                anchor="bottom"
-                pitchAlignment='viewport'
-                onClick={() => {console.log("Showing Car popup with car", car)}}
-                >
-                <FontAwesomeIcon icon={faCarSide} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
-            </Marker>
+            <></>
         )
     }
     useEffect(() => {
@@ -48,18 +38,10 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
 
     return (
         <View style={styles.homeContainer}>
-            <Map
-                mapLib={mapboxgl}
-                initialViewState={{
-                longitude: 10.4275,
-                latitude: 55.366,
-                zoom: 14
-                }}
-                mapStyle="mapbox://styles/mapbox/streets-v9"
-                mapboxAccessToken={"pk.eyJ1IjoiZ3VzdGF2YnciLCJhIjoiY2xuZno0Znl5MGJjYTJxbWk0cm1jY24xNSJ9.NdCcfyzq5ltuXHkjzrzZLQ"}
-            >
-                {carMarkers}
-            </Map>
+            <Image source={{uri: "../../assets/map.png"}} 
+                style={styles.mapView}
+                resizeMode='cover'
+            />
             <View style={styles.lowerMenu}>
                 <Pressable style={styles.iconButton}
                     onPress={() => {
@@ -115,7 +97,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row', // Horizontal layout for the menu items
       justifyContent: 'space-evenly', // Space evenly between menu items
       alignItems: 'center', // Center items vertically
-    width: "100%",
+      width: "100%",
       zIndex: 1,
       backgroundColor: StylingDefaults.colors.blueDark.hsl,
     },
@@ -140,8 +122,7 @@ const styles = StyleSheet.create({
       borderColor: 'black', // Border color
       borderRadius: StylingDefaults.borderRadius, // Rounded corners for the input
       backgroundColor: StylingDefaults.colors.blueBase.hsl, // White background for the input
-      textAlign: 'center', // Center text horizontally
-      textOverflow: 'ellipsis', // Ellipsis overflow for the input
+      textAlign: 'center' // Center text horizontally
     },
   });
   
