@@ -40,6 +40,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
         <SafeAreaView style={styles.homeContainer}>
             <Image source={require('./map.png')} 
                 style={styles.mapView}
+                resizeMode='cover'
             />
             <View style={styles.lowerMenu}>
                 <Pressable style={styles.iconButton}
@@ -85,12 +86,15 @@ const styles = StyleSheet.create({
     },
     mapView: {
       zIndex: 0,
-      width: "100%"
+      position: "absolute",
+      width: "100%",
+      height: "100%"
     },
     lowerMenu: {
       position: "absolute",
-      bottom: heightOfMenuPercent + "%" as DimensionValue,
-      height: heightOfMenuPercent + "%" as DimensionValue,
+      bottom: 0,
+      height: "10%",
+      paddingBottom: 10,
       display: 'flex', // Set display value to flex
       flexDirection: 'row', // Horizontal layout for the menu items
       justifyContent: 'space-evenly', // Space evenly between menu items
