@@ -23,6 +23,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
             <></>
         )
     }
+    
     useEffect(() => {
         console.log("Cars changed, updating markers")
         const newMarkers = cars.map((car, index) => getCarMarker(car, index));
@@ -50,12 +51,11 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
             <Image source={require('./map.png')} 
                 style={styles.mapView}
                 resizeMode='cover'
-            />
+            /> 
             <View style={styles.lowerMenu}>
                 <Pressable style={styles.iconButton}
                     onPress={() => {
                         console.log("Showing menu");
-         
                     }}
                 >
                     <FontAwesomeIcon icon={faBars} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
