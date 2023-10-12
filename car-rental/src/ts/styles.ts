@@ -10,5 +10,7 @@ export const StylingDefaults = {
     iconSize: 40,
     colors: Colors,
     backgroundGradient: [Colors.blueBase.hsl, Colors.greenBase.hsl],
-
+    fontSize: {
+        title: 50,
+    }
 }
