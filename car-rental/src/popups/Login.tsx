@@ -3,14 +3,23 @@ import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Butto
 import { StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function Login() : JSX.Element {
+interface LoginProps {
+    setPage: (view: JSX.Element) => void;
+    setPopUp: (view: JSX.Element) => void;
+}
+
+export default function Login({
+    setPage,
+    setPopUp,
+}: LoginProps
+) : JSX.Element {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     var [modalVisible, setModalVisible] = useState(false);
 
     return (
             <View style={styles.container}>
-                <Modal visible={modalVisible} animationType="slide" transparent={true}>
+                <Modal animationType="slide">
                     <LinearGradient 
                             colors={['#3498db', '#2ecc71']}
                             style={styles.modal}>

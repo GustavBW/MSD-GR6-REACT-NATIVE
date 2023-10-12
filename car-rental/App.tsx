@@ -15,7 +15,7 @@ export default function App() {
   const [carData, setCarData] = useState<Car[]>([]);
   const [networkError, setNetworkError] = useState<Error | null>(null);
   const [blurPage, setBlurPage] = useState<JSX.Element>(<></>);
-  const [popUp, setDialog] = useState<JSX.Element>(<Login></Login>);
+  const [popUp, setDialog] = useState<JSX.Element>(<></>);
 
   React.useEffect(() => {
     const doTheThing = async () => {
