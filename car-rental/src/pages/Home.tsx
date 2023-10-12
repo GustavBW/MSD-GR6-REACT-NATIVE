@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View } from 'react-native';
+import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View, Keyboard } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
@@ -24,6 +24,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
             <></>
         )
     }
+    
     useEffect(() => {
         console.log("Cars changed, updating markers")
         const newMarkers = cars.map((car, index) => getCarMarker(car, index));
@@ -36,8 +37,8 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
             return (
                 <Pressable style={{zIndex: 1, position: "absolute", width: "100%", height: "100%"}} 
                     onPress={() => {
-                        console.log("captured")
                         setInputFocused(false);
+                        Keyboard.dismiss();
                     }}
                 />
             );
@@ -51,12 +52,11 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
             <Image source={require('./map.png')} 
                 style={styles.mapView}
                 resizeMode='cover'
-            />
+            /> 
             <View style={styles.lowerMenu}>
                 <Pressable style={styles.iconButton}
                     onPress={() => {
                         console.log("Showing menu");
-         
                     }}
                 >
                     <FontAwesomeIcon icon={faBars} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />

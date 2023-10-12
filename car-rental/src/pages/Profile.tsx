@@ -1,19 +1,16 @@
-import React from "react";
-import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated } from "react-native"
+import React, { useEffect } from 'react';
+import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View, Keyboard } from 'react-native';
 
-interface profileProps {
+export interface ProfileProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
 }
 
-export default function Profile({
-    setPage,
-    setPopUp,
-}: profileProps
-) : JSX.Element {
+export default function Profile({setPage, setPopUp}: ProfileProps): JSX.Element {
     return (
         <View>
-            <Text>Profile</Text>
+            Profile
+
         </View>
-    );
+    )
 }
