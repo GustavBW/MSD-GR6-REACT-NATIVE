@@ -22,6 +22,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
     const [address, setAddress] = React.useState<string>("");
     const [currentlyActive, setCurrentlyActive] = React.useState<Actives>(Actives.neither);
     const [carMarkers, setMarkers] = React.useState<JSX.Element[]>([]);
+    const [inputFocused, setInputFocused] = React.useState<boolean>(false);
 
     const getCarMarker = (car: Car, key: number): JSX.Element => {
         console.log("Generating marker for car", car)
@@ -52,16 +53,21 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
                     <FontAwesomeIcon icon={faBars} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
                 </Pressable>
                 <TextInput
-                    style={{...styles.input, backgroundColor: currentlyActive == Actives.input ? StylingDefaults.colors.greenBase.hsl :  StylingDefaults.colors.blueBase.hsl}}
+                    style={ inputFocused ? {...styles.input,
+                        bottom: "100%",
+                        position: "relative"
+                    } : styles.input}
                     placeholder="University of Southern Denmark"
                     inputMode="text"
                     defaultValue={address}
                     onFocus={() => {
                         console.log("Showing input")
+                        setInputFocused(true);
                         setCurrentlyActive(Actives.input);
                     }}
                     onBlur={() => {
                         console.log("Hiding input")
+                        setInputFocused(false);
                         setCurrentlyActive(Actives.neither);
                     }}
                 />
@@ -116,6 +122,7 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     input: {
+      zIndex: 1,
       flex: 2, // Takes up twice the space of the buttons
       paddingHorizontal: 10, // Add horizontal padding for the input
       borderWidth: 1, // Add border for the input
