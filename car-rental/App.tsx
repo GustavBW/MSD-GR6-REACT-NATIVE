@@ -65,8 +65,10 @@ export default function App() {
   return (
     <View style={styles.container}>
       {currentView}
-      {blurPage}
-      {popUp}
+{/*       {blurPage}
+ */}      <View>
+        {popUp}
+      </View>
     </View>
   );
 
