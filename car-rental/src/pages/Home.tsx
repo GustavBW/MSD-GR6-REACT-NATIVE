@@ -4,6 +4,7 @@ import { StylingDefaults } from '../ts/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
 import { Car } from '../ts/types';
+import {Menu} from '../popups/Menu';
 
 export interface HomeProps {
     setPage: (view: JSX.Element) => void;
@@ -47,6 +48,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps){
                 <Pressable style={styles.iconButton}
                     onPress={() => {
                         console.log("Showing menu");
+                        setPopUp(<Menu setPopUp={setPopUp} setPage={setPage}/>)
                         setCurrentlyActive(Actives.menu);
                     }}
                 >
