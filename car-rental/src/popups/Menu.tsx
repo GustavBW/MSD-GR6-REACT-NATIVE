@@ -6,10 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import {faCarSide, faCircleInfo, faPhone, faFileInvoiceDollar, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { StylingDefaults } from '../ts/styles';
 
-
-
-
-
 export interface MenuProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
@@ -17,40 +13,40 @@ export interface MenuProps {
 
 export function Menu({setPage, setPopUp}: MenuProps){
     return(
-        <View>
-            <Modal animationType="slide" style={styles.container} transparent={true}>
-            <LinearGradient colors={['#3498db', '#2ecc71']} style={styles.modal}>
-                {/* Top row */}
+        <View style={styles.container}>
+        <Modal animationType="slide" style={styles.modal} transparent={true}>
+            <LinearGradient colors={[StylingDefaults.colors.blueBase.hsl, StylingDefaults.colors.blueDark.hsl]} style={styles.table}>
                 <View style={styles.row}>
                     <Pressable style={styles.button}>
                         <FontAwesomeIcon icon={faCarSide} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
-                        <Text>All Cars</Text>
+                        <Text style={styles.modalText}>All Cars</Text>
                     </Pressable>
                     <Pressable style={styles.button}>
                         <FontAwesomeIcon icon={faFileInvoiceDollar} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
-                        <Text>Invoices</Text>
+                        <Text style={styles.modalText}>Invoices</Text>
                     </Pressable>                
                 </View>
                 {/* Bottom row */}
                 <View style={styles.row}>
                     <Pressable style={styles.button}>
                         <FontAwesomeIcon icon={faCircleInfo} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
-                        <Text>Info</Text>
+                        <Text style={styles.modalText}>Info</Text>
                     </Pressable>                    
                     <Pressable style={styles.button}>
                         <FontAwesomeIcon icon={faPhone} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
-                        <Text>Support</Text>
+                        <Text style={styles.modalText}>Support</Text>
                     </Pressable>                
                 </View>
-                {/* Circular "X" button in the top right corner */}
-                <View style={styles.closeButton}>
-                    <Pressable style={styles.button} onPress={()=>setPopUp(<></>)}>
-                        <FontAwesomeIcon icon={faCircleXmark} size={30} color={StylingDefaults.colors.blueBase.hsl}/>
-
-                    </Pressable>
-                </View>
             </LinearGradient>
-            </Modal>
+                {/* Top row */}
+            
+            {/* Circular "X" button in the top right corner */}
+            <View style={styles.closeButton}>
+                <Pressable style={styles.button} onPress={()=>setPopUp(<></>)}>
+                    <FontAwesomeIcon icon={faCircleXmark} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                </Pressable>
+            </View>
+        </Modal>
         </View>
     )
 }
@@ -58,54 +54,48 @@ export function Menu({setPage, setPopUp}: MenuProps){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: 20,
-      },
-      row: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modal: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 'auto',
+        marginBottom: 'auto',         
+        borderRadius: 15,
+        paddingHorizontal: '5%',
+    },
+    row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-      },
-      closeButton: {
+    },
+    closeButton: {
         position: 'absolute',
-        top: 20,
-        right: 20,
-      },
-    modal: {
-        position: 'absolute',
-        top: '30%', // Adjust the top position to make it smaller
-        left: 0,
-        right: 0,
+        flex: 1,
+        top: "20%",
+        right: "1%",
+    },
+    table: {
+        zIndex: 0,
+        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding:50,
-        
-        backgroundColor: 'transparent', // Set the background color to transparent
-        borderRadius: 10,
-      
-
-      },
+        width: '100%',
+        height: '100%',
+    },
     modalText: {
-    fontSize: 20,
-    marginBottom: 20,
-    textAlign: 'center',
-    color: 'white',
-    fontWeight: 'bold',
-    },
-    button: {
-        width: 200,
-        height: 200,
-        backgroundColor: 'transparent',
-        borderRadius: 15,
-        marginBottom: 10,
-        padding: 8,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    buttonText: {
+        fontSize: 20,
+        padding: "5%",
+        textAlign: 'center',
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 15,
+    },
+    button: {
+        zIndex: 1,
+        padding: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
     }
   });
 
