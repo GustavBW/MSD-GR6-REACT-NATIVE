@@ -3,14 +3,14 @@ import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, 
 import { StylingDefaults } from '../ts/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
-import { Car } from '../ts/types';
+import { CarData } from '../ts/types';
 import Login from '../popups/Login';
 import { Menu } from '../popups/Menu';
 
 export interface HomeProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
-    cars: Car[];
+    cars: CarData[];
 }
 
 export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element {
@@ -18,7 +18,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
     const [carMarkers, setMarkers] = React.useState<JSX.Element[]>([]);
     const [inputFocused, setInputFocused] = React.useState<boolean>(false);
 
-    const getCarMarker = (car: Car, key: number): JSX.Element => {
+    const getCarMarker = (car: CarData, key: number): JSX.Element => {
         console.log("Generating marker for car", car)
         return (
             <></>
