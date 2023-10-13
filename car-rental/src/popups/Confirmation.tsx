@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View, Keyboard } from 'react-native';
+import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, Text, View, Keyboard } from 'react-native';
 
 export interface ConfirmationProps {
     setPage: (view: JSX.Element) => void;
@@ -9,7 +9,7 @@ export interface ConfirmationProps {
 export default function Confirmation({setPage, setPopUp}: ConfirmationProps): JSX.Element {
     return (
         <View>
-            wdym Confirmation
+            <Text>Confirmation</Text>
 
         </View>
     )

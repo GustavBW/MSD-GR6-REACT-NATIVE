@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View, Keyboard } from 'react-native';
+import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, Text, View, Keyboard } from 'react-native';
 
 export interface LicenseProps {
     setPage: (view: JSX.Element) => void;
@@ -9,7 +9,7 @@ export interface LicenseProps {
 export default function License({setPage, setPopUp}: LicenseProps): JSX.Element {
     return (
         <View>
-            License
+            <Text>License</Text>
 
         </View>
     )
