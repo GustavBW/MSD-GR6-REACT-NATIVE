@@ -2,13 +2,14 @@ import React from  'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Car } from '../ts/types';
+import { CarData } from '../ts/types';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import Home from './Home';
+import Car from '../popups/Car';
 
 interface AllCars {
-    cars: Car[];
+    cars: CarData[];
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
 }
@@ -150,10 +151,10 @@ export default function AllCars({cars, setPage, setPopUp}: AllCars){
                     <View style={styles.tableBody}>
                         {cars.map((car, index) => {
                             return (
-                                <View key={index} style={styles.tableRow}>
+                                <Pressable key={index} style={styles.tableRow} onPress={() => setPopUp(<Car car={car} setPage={setPage} setPopUp={setPopUp}></Car>)}>
                                     <Text style={styles.tableRowText}>{car.model}</Text>
                                     <Text style={styles.tableRowText}>{car.dkkPrKm}</Text>
-                                </View>
+                                </Pressable>
                             )
                         })}
                     </View>

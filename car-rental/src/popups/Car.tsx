@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, Text, View, Keyboard } from 'react-native';
-import { Car } from '../ts/types';
+import { CarData } from '../ts/types';
 
 export interface CarProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
-    car: Car;
+    car: CarData;
 }
 
-export default function Car({setPage, setPopUp}: CarProps): JSX.Element {
+export default function Car({setPage, setPopUp, car}: CarProps): JSX.Element {
     return (
         <View>
-            <Text>Car</Text>
+            <Text>{car.manufacturer}</Text>
 
         </View>
     )

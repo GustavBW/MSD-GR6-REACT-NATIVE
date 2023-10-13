@@ -1,4 +1,4 @@
-export type Car = {
+export type CarData = {
     model: string;
     manufacturer: string;
     year: number;
