@@ -2,6 +2,9 @@ import React from "react";
 import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, TouchableOpacity } from "react-native"
 import { Button, Icon } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import {faCarSide, faCircleInfo, faPhone, faFileInvoiceDollar, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
+import { StylingDefaults } from '../ts/styles';
 
 
 
@@ -15,21 +18,35 @@ export interface MenuProps {
 export function Menu({setPage, setPopUp}: MenuProps){
     return(
         <View>
-            <Modal animationType="slide" style={styles.container}>
+            <Modal animationType="slide" style={styles.container} transparent={true}>
             <LinearGradient colors={['#3498db', '#2ecc71']} style={styles.modal}>
                 {/* Top row */}
                 <View style={styles.row}>
-                    <Button title="All Cars" buttonStyle={styles.button} />
-                    <Button title="Invoices" buttonStyle={styles.button} />
+                    <Pressable style={styles.button}>
+                        <FontAwesomeIcon icon={faCarSide} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                        <Text>All Cars</Text>
+                    </Pressable>
+                    <Pressable style={styles.button}>
+                        <FontAwesomeIcon icon={faFileInvoiceDollar} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                        <Text>Invoices</Text>
+                    </Pressable>                
                 </View>
                 {/* Bottom row */}
                 <View style={styles.row}>
-                    <Button title="About" buttonStyle={styles.button} />
-                    <Button title="Support" buttonStyle={styles.button} />
+                    <Pressable style={styles.button}>
+                        <FontAwesomeIcon icon={faCircleInfo} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                        <Text>Info</Text>
+                    </Pressable>                    
+                    <Pressable style={styles.button}>
+                        <FontAwesomeIcon icon={faPhone} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                        <Text>Support</Text>
+                    </Pressable>                
                 </View>
                 {/* Circular "X" button in the top right corner */}
                 <View style={styles.closeButton}>
-                    <Icon name="close" type="font-awesome" color="white" size={30} />
+                    <Pressable style={styles.button}>
+                        <FontAwesomeIcon icon={faCircleXmark} size={30} color={StylingDefaults.colors.blueBase.hsl}/>
+                    </Pressable>
                 </View>
             </LinearGradient>
             </Modal>
