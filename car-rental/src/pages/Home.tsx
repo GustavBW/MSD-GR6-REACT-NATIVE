@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
 import { Car } from '../ts/types';
 import Login from '../popups/Login';
-import { Menu } from '../popups/Menu';
 import MapView, {Marker} from 'react-native-maps';
+import { Menu } from '../popups/Menu';
 
 export interface HomeProps {
     setPage: (view: JSX.Element) => void;

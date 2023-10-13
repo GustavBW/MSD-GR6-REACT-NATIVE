@@ -44,8 +44,9 @@ export function Menu({setPage, setPopUp}: MenuProps){
                 </View>
                 {/* Circular "X" button in the top right corner */}
                 <View style={styles.closeButton}>
-                    <Pressable style={styles.button}>
+                    <Pressable style={styles.button} onPress={()=>setPopUp(<></>)}>
                         <FontAwesomeIcon icon={faCircleXmark} size={30} color={StylingDefaults.colors.blueBase.hsl}/>
+
                     </Pressable>
                 </View>
             </LinearGradient>
