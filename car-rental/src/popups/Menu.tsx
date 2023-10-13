@@ -14,9 +14,15 @@ export interface MenuProps {
 export function Menu({setPage, setPopUp}: MenuProps){
     return(
         <View style={styles.container}>
-        <Modal animationType="slide" style={styles.modal} transparent={true}>
-            <LinearGradient colors={[StylingDefaults.colors.blueBase.hsl, StylingDefaults.colors.blueDark.hsl]} style={styles.table}>
-                <View style={styles.row}>
+        <Modal animationType="slide"  transparent={true}>
+            
+            <LinearGradient colors={[StylingDefaults.colors.blueBase.hsl, StylingDefaults.colors.blueDark.hsl]} style={styles.modal}>
+                <View style={styles.closeButton}>
+                    <Pressable style={styles.button} onPress={()=>setPopUp(<></>)}>
+                        <FontAwesomeIcon icon={faCircleXmark} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                    </Pressable>
+                </View>
+                <View style={styles.row }>
                     <Pressable style={styles.button}>
                         <FontAwesomeIcon icon={faCarSide} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
                         <Text style={styles.modalText}>All Cars</Text>
@@ -40,12 +46,7 @@ export function Menu({setPage, setPopUp}: MenuProps){
             </LinearGradient>
                 {/* Top row */}
             
-            {/* Circular "X" button in the top right corner */}
-            <View style={styles.closeButton}>
-                <Pressable style={styles.button} onPress={()=>setPopUp(<></>)}>
-                    <FontAwesomeIcon icon={faCircleXmark} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
-                </Pressable>
-            </View>
+            
         </Modal>
         </View>
     )
@@ -58,44 +59,39 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modal: {
+        flexDirection :'column',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 'auto',
-        marginBottom: 'auto',         
+        margin: 'auto',    
         borderRadius: 15,
-        paddingHorizontal: '5%',
+        width: '30%',
+        height: 'auto',
+
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        width: '30%',
     },
     closeButton: {
-        position: 'absolute',
-        flex: 1,
-        top: "20%",
-        right: "1%",
-    },
-    table: {
-        zIndex: 0,
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100%',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginTop: '2%',
+        marginBottom: '2%',
+        marginLeft: 'auto',
+        paddingHorizontal: '5%',
     },
     modalText: {
         fontSize: 20,
-        padding: "5%",
-        textAlign: 'center',
         color: 'white',
         fontWeight: 'bold',
     },
     button: {
-        zIndex: 1,
-        padding: 30,
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom: '2%',
     }
   });
 
