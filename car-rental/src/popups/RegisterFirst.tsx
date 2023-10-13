@@ -18,67 +18,68 @@ export default function RegisterFirst({
     const [password, setPassword] = useState("");
     const [retypedPassword, setRetypedPassword] = useState("");
     const [modalVisible, setModalVisible] = useState(true);
-    const animatedOpacitory = useRef(new Animated.Value(0)).current;
+    const translateY = useRef(new Animated.Value(0)).current;
     const closeRegister = () => {
-        Animated.timing(animatedOpacitory, {
-          toValue: 1, 
+        Animated.timing(translateY, {
+          toValue: 1000, 
           duration: 500,
           useNativeDriver: true,
-        }).start();
+        }).start(() => {
+          setModalVisible(false);
+          setPopUp(<></>);
+        });
       };
     
     return (
-        <View style={styles.container}>
-            <Modal animationType="fade" transparent={true} visible={true}>
-            <Animated.View
-              style={[
-                styles.modal,
-                {
-                  opacity: animatedOpacitory,
-                }
-              ]}
+      
+
+      <View style={styles.container}>
+        <Modal animationType="fade" transparent={true} visible={true}>
+          <Animated.View
+              style={
+                styles.modal}
             >
             <LinearGradient
                 colors={StylingDefaults.colors.BlueAndGreen}
                 style={styles.linearGradient}
               >
-                <View style={styles.popUpHeader}>
-                  <Text style={styles.modalText}>Register</Text>
-                  <TouchableOpacity style={styles.closeBtn} onPress={closeRegister}>
-                    <Text style={styles.closeBtnText}>X</Text>
-                  </TouchableOpacity>
-                </View> 
-    
-                
-                <TextInput
-                  style={styles.input}
-                  placeholder="Username"
-                  onChangeText={(text) => setUsername(text)}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Password"
-                  secureTextEntry={true}
-                  onChangeText={(text) => setPassword(text)}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Repeat Password"
-                  secureTextEntry={true}
-                  onChangeText={(text) => setRetypedPassword(text)}
-                />
-    
-                <TouchableOpacity style={styles.button} onPress={()=>{
+              <View style={styles.popUpHeader}>
+                <Text style={styles.modalText}>Register</Text>
+                <TouchableOpacity style={styles.closeBtn} onPress={closeRegister}>
+                  <Text style={styles.closeBtnText}>X</Text>
+                </TouchableOpacity>
+              </View> 
+  
+              
+              <TextInput
+                style={styles.input}
+                placeholder="Username"
+                onChangeText={(text) => setUsername(text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                secureTextEntry={true}
+                onChangeText={(text) => setPassword(text)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Repeat Password"
+                secureTextEntry={true}
+                onChangeText={(text) => setRetypedPassword(text)}
+              />
+  
+              <TouchableOpacity style={styles.button} onPress={()=>{
                     setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp}/>)
                 }}>
-                  <Text style={styles.buttonText}>Register</Text>
-                </TouchableOpacity>
-              </LinearGradient>
-              </Animated.View>
-            </Modal>
-        </View>
+                <Text style={styles.buttonText}>Register</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </Animated.View>
+        </Modal>
+      </View>
     );
-}
+  }
 
 const styles = StyleSheet.create({
     container: {
@@ -93,6 +94,8 @@ const styles = StyleSheet.create({
         marginBottom: 'auto',         
         borderRadius: 15,
         paddingHorizontal: '5%',
+      
+
       },
     linearGradient: {
     padding: '2%',

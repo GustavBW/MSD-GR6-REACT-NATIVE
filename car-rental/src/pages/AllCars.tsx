@@ -146,12 +146,13 @@ export default function AllCars({cars, setPage, setPopUp}: AllCars){
                 <View style={styles.table}>
                     <View style={styles.tableHeader}>
                         <Text style={styles.tableHeaderText}>Model</Text>
-                        <Text style={styles.tableHeaderText}>Kr/Km</Text>
+                        <Text style={styles.tableHeaderText}>Kr/Km</Text>   
                     </View>
                     <View style={styles.tableBody}>
                         {cars.map((car, index) => {
                             return (
                                 <Pressable key={index} style={styles.tableRow} onPress={() => setPopUp(<Car car={car} setPage={setPage} setPopUp={setPopUp}></Car>)}>
+                                    <Text style={styles.tableRowText}>{car.manufacturer}</Text>
                                     <Text style={styles.tableRowText}>{car.model}</Text>
                                     <Text style={styles.tableRowText}>{car.dkkPrKm}</Text>
                                 </Pressable>
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
         height: "10%",
         padding: "5%",
         marginBottom: "5%",
-        backgroundColor: StylingDefaults.colors.blueBase.hsl,
+        backgroundColor: "hsl(290, 80%, 30%)",
         borderRadius: 10,
     },
     tableRowText: {
