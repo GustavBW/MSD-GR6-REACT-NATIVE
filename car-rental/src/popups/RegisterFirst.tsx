@@ -18,16 +18,13 @@ export default function RegisterFirst({
     const [password, setPassword] = useState("");
     const [retypedPassword, setRetypedPassword] = useState("");
     const [modalVisible, setModalVisible] = useState(true);
-    const translateY = useRef(new Animated.Value(0)).current;
+    const animatedOpacitory = useRef(new Animated.Value(0)).current;
     const closeRegister = () => {
-        Animated.timing(translateY, {
-          toValue: 1000, 
+        Animated.timing(animatedOpacitory, {
+          toValue: 1, 
           duration: 500,
           useNativeDriver: true,
-        }).start(() => {
-          setModalVisible(false);
-          setPopUp(<></>);
-        });
+        }).start();
       };
     
     return (
@@ -37,7 +34,7 @@ export default function RegisterFirst({
               style={[
                 styles.modal,
                 {
-                  transform: [{ translateY: translateY }],
+                  opacity: animatedOpacitory,
                 }
               ]}
             >
@@ -96,8 +93,6 @@ const styles = StyleSheet.create({
         marginBottom: 'auto',         
         borderRadius: 15,
         paddingHorizontal: '5%',
-      
-
       },
     linearGradient: {
     padding: '2%',

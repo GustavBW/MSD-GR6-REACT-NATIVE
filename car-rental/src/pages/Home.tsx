@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View, Keyboard } from 'react-native';
+import { TouchableOpacity, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View, Keyboard } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
@@ -30,7 +30,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
         const newMarkers = cars.map((car, index) => getCarMarker(car, index));
         setMarkers(newMarkers);
         console.log("Markers updated, cars: ", cars, "markers: ", newMarkers)
-    },[cars]);
+    }, [cars]);
 
     const appendOutofBoundsPressCapture = (): JSX.Element => {
         if(inputFocused){
@@ -54,13 +54,13 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
                 resizeMode='cover'
             /> 
             <View style={styles.lowerMenu}>
-                <Pressable style={styles.iconButton}
+                <TouchableOpacity style={styles.iconButton}
                     onPress={() => {
                         setPopUp(<Menu setPopUp={setPopUp} setPage={setPage}/>)
                     }}
                 >
                     <FontAwesomeIcon icon={faBars} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
-                </Pressable>
+                </TouchableOpacity>
 
                 <TextInput
                     style={ inputFocused ? {
@@ -79,14 +79,14 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
                         setInputFocused(false);
                     }}
                 />
-                <Pressable style={styles.iconButton}
+                <TouchableOpacity style={styles.iconButton}
                     onPress={() => {
                         
                         setPopUp(<Login setPopUp={setPopUp} setPage={setPage}/>)
                     }}
                 >                    
                     <FontAwesomeIcon icon={faUser} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
-                </Pressable>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     )

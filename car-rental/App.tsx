@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { Car } from './src/ts/types';
+import { CarData } from './src/ts/types';
 import BlurPage from './src/components/BlurPage';
 import Home from './src/pages/Home';
 import storage from './src/ts/storage';
@@ -11,7 +11,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 export default function App() {
   //show loading spinner on null
-  const [carData, setCarData] = useState<Car[]>([]);
+  const [carData, setCarData] = useState<CarData[]>([]);
   const [networkError, setNetworkError] = useState<Error | null>(null);
   const [blurPage, setBlurPage] = useState<JSX.Element>(<></>);
   const [popUp, setDialog] = useState<JSX.Element>(<></>);
@@ -21,7 +21,7 @@ export default function App() {
       const localData = await storage.getAllDataForKey(KnownKeys.carData);
       if(localData.length > 0){
         console.log("Fetched data from local storage")
-        setCarData(localData as unknown as Car[]);
+        setCarData(localData as unknown as CarData[]);
         return;
       }
       let serverData;
@@ -35,7 +35,7 @@ export default function App() {
         setNetworkError(error as Error);
         return;
       }
-      setCarData(serverDataJson as Car[]);
+      setCarData(serverDataJson as CarData[]);
       await storage.save({
         key: KnownKeys.carData,
         data: serverDataJson
