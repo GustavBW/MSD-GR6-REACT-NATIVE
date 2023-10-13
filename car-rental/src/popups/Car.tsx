@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View, Keyboard } from 'react-native';
+import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, Text, View, Keyboard } from 'react-native';
 import { Car } from '../ts/types';
 
 export interface CarProps {
@@ -11,7 +11,7 @@ export interface CarProps {
 export default function Car({setPage, setPopUp}: CarProps): JSX.Element {
     return (
         <View>
-            Car
+            <Text>Car</Text>
 
         </View>
     )

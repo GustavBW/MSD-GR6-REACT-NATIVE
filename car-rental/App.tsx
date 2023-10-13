@@ -7,8 +7,7 @@ import Home from './src/pages/Home';
 import storage from './src/ts/storage';
 import { KnownKeys } from './src/ts/storage';
 import {StylingDefaults} from './src/ts/styles';
-import AllCars from './src/pages/AllCars';
-import Login from './src/popups/Login';
+import { createStackNavigator } from '@react-navigation/stack';
 
 export default function App() {
   //show loading spinner on null
@@ -61,12 +60,13 @@ export default function App() {
   }
 
   const [currentView, setCurrentView] = useState<JSX.Element>(<Home setPage={setPage} setPopUp={setPopUp} cars={carData}/>);
+  const Stack = createStackNavigator();
+  
 
   return (
     <View style={styles.container}>
       {currentView}
-{/*       {blurPage}
- */}      <View>
+     <View>
         {popUp}
       </View>
     </View>
