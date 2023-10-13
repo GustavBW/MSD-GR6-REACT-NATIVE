@@ -5,25 +5,27 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import {faCarSide, faCircleInfo, faPhone, faFileInvoiceDollar, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { StylingDefaults } from '../ts/styles';
+import AllCars from "../pages/AllCars";
+import { CarData } from "../ts/types";
 
 export interface MenuProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
+    cars: CarData[];
 }
 
-export function Menu({setPage, setPopUp}: MenuProps){
+export function Menu({setPage, setPopUp, cars}: MenuProps){
     return(
         <View style={styles.container}>
         <Modal animationType="slide"  transparent={true}>
-            
+            <View style={styles.closeButton}>
+                <Pressable style={styles.button} onPress={()=>setPopUp(<></>)}>
+                    <FontAwesomeIcon icon={faCircleXmark} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                </Pressable>
+            </View>
             <LinearGradient colors={[StylingDefaults.colors.blueBase.hsl, StylingDefaults.colors.blueDark.hsl]} style={styles.modal}>
-                <View style={styles.closeButton}>
-                    <Pressable style={styles.button} onPress={()=>setPopUp(<></>)}>
-                        <FontAwesomeIcon icon={faCircleXmark} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
-                    </Pressable>
-                </View>
-                <View style={styles.row }>
-                    <Pressable style={styles.button}>
+                <View style={styles.row}>
+                    <Pressable style={styles.button} onPress={() => setPage(<AllCars setPage={setPage} setPopUp={setPopUp} cars={cars}/>)}>
                         <FontAwesomeIcon icon={faCarSide} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
                         <Text style={styles.modalText}>All Cars</Text>
                     </Pressable>
@@ -62,25 +64,24 @@ const styles = StyleSheet.create({
         flexDirection :'column',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 'auto',    
-        borderRadius: 15,
-        width: '30%',
-        height: 'auto',
-
+        width: '60%',
+        height: '30%',
+        top: "40%",
+        alignSelf: "center"
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        justifyContent: 'center',
         alignItems: 'center',
-        width: '30%',
+        width: '50%',
     },
     closeButton: {
+        zIndex: 1,
+        position: "absolute",
+        top: "35%",
+        left: "25%",
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        marginTop: '2%',
-        marginBottom: '2%',
-        marginLeft: 'auto',
-        paddingHorizontal: '5%',
     },
     modalText: {
         fontSize: 20,
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: '2%',
+        padding: "10%"
     }
   });
 
