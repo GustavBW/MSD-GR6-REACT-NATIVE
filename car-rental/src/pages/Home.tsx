@@ -6,6 +6,7 @@ import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
 import { CarData } from '../ts/types';
 import Login from '../popups/Login';
 import { Menu } from '../popups/Menu';
+import CarMap from '../components/CarMap';
 
 export interface HomeProps {
     setPage: (view: JSX.Element) => void;
@@ -15,22 +16,7 @@ export interface HomeProps {
 
 export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element {
     const [address, setAddress] = React.useState<string>("");
-    const [carMarkers, setMarkers] = React.useState<JSX.Element[]>([]);
     const [inputFocused, setInputFocused] = React.useState<boolean>(false);
-
-    const getCarMarker = (car: CarData, key: number): JSX.Element => {
-        console.log("Generating marker for car", car)
-        return (
-            <></>
-        )
-    }
-    
-    useEffect(() => {
-        console.log("Cars changed, updating markers")
-        const newMarkers = cars.map((car, index) => getCarMarker(car, index));
-        setMarkers(newMarkers);
-        console.log("Markers updated, cars: ", cars, "markers: ", newMarkers)
-    }, [cars]);
 
     const appendOutofBoundsPressCapture = (): JSX.Element => {
         if(inputFocused){
@@ -49,10 +35,9 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
     return (
         <SafeAreaView style={styles.homeContainer}>
             {appendOutofBoundsPressCapture()}
-            <Image source={require('./map.png')} 
-                style={styles.mapView}
-                resizeMode='cover'
-            /> 
+            <View style={styles.mapView}>
+                <CarMap cars={cars}/>
+            </View> 
             <View style={styles.lowerMenu}>
                 <TouchableOpacity style={styles.iconButton}
                     onPress={() => {
