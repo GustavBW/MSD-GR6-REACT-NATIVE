@@ -1,20 +1,19 @@
 import React from "react";
 import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, TouchableOpacity } from "react-native"
-import { Button, Icon } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import {faCarSide, faCircleInfo, faPhone, faFileInvoiceDollar, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { StylingDefaults } from '../ts/styles';
-import AllCars from "../pages/AllCars";
-import { CarData } from "../ts/types";
+import { CarData, NavigationHook, Pages } from "../ts/types";
 
 export interface MenuProps {
-    setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
     cars: CarData[];
+    navigation: NavigationHook;
 }
 
-export function Menu({setPage, setPopUp, cars}: MenuProps){
+export function Menu({navigation, setPopUp, cars}: MenuProps){
+
     return(
         <View style={styles.container}>
         <Modal animationType="slide"  transparent={true}>
@@ -25,7 +24,7 @@ export function Menu({setPage, setPopUp, cars}: MenuProps){
             </View>
             <LinearGradient colors={[StylingDefaults.colors.blueBase.hsl, StylingDefaults.colors.blueDark.hsl]} style={styles.modal}>
                 <View style={styles.row}>
-                    <Pressable style={styles.button} onPress={() => setPage(<AllCars setPage={setPage} setPopUp={setPopUp} cars={cars}/>)}>
+                    <Pressable style={styles.button} onPress={() => navigation.navigate(Pages.AllCars, {cars, setPopUp})}>
                         <FontAwesomeIcon icon={faCarSide} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
                         <Text style={styles.modalText}>All Cars</Text>
                     </Pressable>

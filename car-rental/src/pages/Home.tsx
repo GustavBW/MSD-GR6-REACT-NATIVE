@@ -3,7 +3,7 @@ import { TouchableOpacity, Image, Pressable, StyleSheet, SafeAreaView, TextInput
 import { StylingDefaults } from '../ts/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
-import { CarData } from '../ts/types';
+import { CarData, Pages, StackProps } from '../ts/types';
 import Login from '../popups/Login';
 import { Menu } from '../popups/Menu';
 
@@ -13,7 +13,8 @@ export interface HomeProps {
     cars: CarData[];
 }
 
-export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element {
+export default function Home({navigation, route}: StackProps<Pages.Home>): JSX.Element {
+    const { setPopUp, cars } = route.params;
     const [address, setAddress] = React.useState<string>("");
     const [carMarkers, setMarkers] = React.useState<JSX.Element[]>([]);
     const [inputFocused, setInputFocused] = React.useState<boolean>(false);
@@ -56,7 +57,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
             <View style={styles.lowerMenu}>
                 <TouchableOpacity style={styles.iconButton}
                     onPress={() => {
-                        setPopUp(<Menu cars={cars} setPopUp={setPopUp} setPage={setPage}/>)
+                        setPopUp(<Menu navigation={navigation} cars={cars} setPopUp={setPopUp} />)
                     }}
                 >
                     <FontAwesomeIcon icon={faBars} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
@@ -82,7 +83,7 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
                 <TouchableOpacity style={styles.iconButton}
                     onPress={() => {
                         
-                        setPopUp(<Login setPopUp={setPopUp} setPage={setPage}/>)
+                        setPopUp(<Login setPopUp={setPopUp} setPage={ignored => {}}/>)
                     }}
                 >                    
                     <FontAwesomeIcon icon={faUser} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />

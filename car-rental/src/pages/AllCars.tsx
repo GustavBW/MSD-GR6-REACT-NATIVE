@@ -1,19 +1,10 @@
 import React from  'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
-import { LinearGradient } from 'expo-linear-gradient';
-import { CarData } from '../ts/types';
+import { Pages, StackProps } from '../ts/types';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
-import Home from './Home';
 import Car from '../popups/Car';
-
-interface AllCars {
-    cars: CarData[];
-    setPage: (view: JSX.Element) => void;
-    setPopUp: (view: JSX.Element) => void;
-}
-
 const data = [
     {
         model: "Model S",
@@ -134,11 +125,10 @@ const data = [
         lon: -118.2437,
         available: true,
         id: 1010
-    }]
+    }];
 
-export default function AllCars({cars, setPage, setPopUp}: AllCars){
-    cars = data;
-
+export default function AllCars({ navigation, route }: StackProps<Pages.AllCars>): JSX.Element {
+    const { cars, setPopUp } = route.params;
     return (
         <View style={styles.container}>
             <Text style={styles.pageTitle}>All Cars</Text>
@@ -149,9 +139,9 @@ export default function AllCars({cars, setPage, setPopUp}: AllCars){
                         <Text style={styles.tableHeaderText}>Kr/Km</Text>   
                     </View>
                     <View style={styles.tableBody}>
-                        {cars.map((car, index) => {
+                        {data.map((car, index) => {         {/* INSERT CARS INSTEAD WHEN DATA FETCHING IS FIXED */}
                             return (
-                                <Pressable key={index} style={styles.tableRow} onPress={() => setPopUp(<Car car={car} setPage={setPage} setPopUp={setPopUp}></Car>)}>
+                                <Pressable key={index} style={styles.tableRow} onPress={() => setPopUp(<Car car={car} setPage={(ignored) => {}} setPopUp={setPopUp}></Car>)}>
                                     <Text style={styles.tableRowText}>{car.manufacturer}</Text>
                                     <Text style={styles.tableRowText}>{car.model}</Text>
                                     <Text style={styles.tableRowText}>{car.dkkPrKm}</Text>
@@ -161,7 +151,7 @@ export default function AllCars({cars, setPage, setPopUp}: AllCars){
                     </View>
                 </View>
                 <View style={styles.xButtonSpacer}>
-                    <Pressable onPress={() => setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={cars}/>)}>
+                    <Pressable onPress={() => navigation.navigate(Pages.Home, {cars, setPopUp})}>
                         <FontAwesomeIcon icon={faCircleXmark} size={60} color="black" />
                     </Pressable>
                 </View>

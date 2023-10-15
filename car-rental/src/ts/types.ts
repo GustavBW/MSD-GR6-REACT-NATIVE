@@ -1,3 +1,34 @@
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
+
+export enum Pages {
+    AllCars = "AllCars",
+    Home = "Home",
+    License = "License",
+    PaymentFirst = "PaymentFirst",
+    PaymentSecond = "PaymentSecond",
+    Profile = "Profile",
+    Scan = "Scan",
+    Splash = "Splash",
+}
+
+/**
+ * Describes what each component, representing a page, requires as props.
+ */
+export type StackParamList = {
+    //TS magic, dw about it
+    [Pages.AllCars]: {cars: CarData[], setPopUp: (popUp: JSX.Element) => void};
+    [Pages.Home]: {cars: CarData[], setPopUp: (popUp: JSX.Element) => void};
+    [Pages.License]: {setPopUp: (popUp: JSX.Element) => void};
+    [Pages.PaymentFirst]: {setPopUp: (popUp: JSX.Element) => void};
+    [Pages.PaymentSecond]: {setPopUp: (popUp: JSX.Element) => void};
+    [Pages.Profile]: {setPopUp: (popUp: JSX.Element) => void};
+    [Pages.Scan]: {setPopUp: (popUp: JSX.Element) => void};
+    [Pages.Splash]: {};
+}
+
+export type NavigationHook = StackNavigationProp<StackParamList, any, any>;
+export type StackProps<T extends Pages> = StackScreenProps<StackParamList, T>;
+
 export type CarData = {
     model: string;
     manufacturer: string;
