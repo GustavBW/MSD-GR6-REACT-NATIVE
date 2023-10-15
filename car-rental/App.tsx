@@ -7,6 +7,7 @@ import storage from './src/ts/storage';
 import { KnownKeys } from './src/ts/storage';
 import {StylingDefaults} from './src/ts/styles';
 import PageStack from './src/components/PageStack';
+import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
   const [popUp, setDialog] = useState<JSX.Element>(<></>);
@@ -16,12 +17,14 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <PageStack setPopUp={setPopUp}/>
-      <View>
-          {popUp}
+    <NavigationContainer> 
+      <View style={styles.container}>
+          <PageStack setPopUp={setPopUp}/>
+        <View>
+            {popUp}
+        </View>
       </View>
-    </View>
+    </NavigationContainer>
   );
 }
 
