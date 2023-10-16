@@ -18,12 +18,12 @@ export function Menu({setPage, setPopUp, cars}: MenuProps){
     return(
         <View style={styles.container}>
         <Modal animationType="slide"  transparent={true}>
-            <View style={styles.closeButton}>
-                <Pressable style={styles.button} onPress={()=>setPopUp(<></>)}>
-                    <FontAwesomeIcon icon={faCircleXmark} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
-                </Pressable>
-            </View>
             <LinearGradient colors={[StylingDefaults.colors.blueBase.hsl, StylingDefaults.colors.blueDark.hsl]} style={styles.modal}>
+                <View style={styles.closeButton}>
+                    <Pressable onPress={()=>setPopUp(<></>)}>
+                        <FontAwesomeIcon icon={faCircleXmark} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                    </Pressable>
+                </View> 
                 <View style={styles.row}>
                     <Pressable style={styles.button} onPress={() => setPage(<AllCars setPage={setPage} setPopUp={setPopUp} cars={cars}/>)}>
                         <FontAwesomeIcon icon={faCarSide} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
         flexDirection :'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '60%',
-        height: '30%',
+        width: '70%',
+        padding: 20,
         top: "40%",
         alignSelf: "center"
     },
@@ -78,10 +78,10 @@ const styles = StyleSheet.create({
     closeButton: {
         zIndex: 1,
         position: "absolute",
-        top: "35%",
-        left: "25%",
+        top: "1%",
+        left: "99%",
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-end'    
     },
     modalText: {
         fontSize: 20,
