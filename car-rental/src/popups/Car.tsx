@@ -5,6 +5,7 @@ import { faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { CarData } from '../ts/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StylingDefaults } from '../ts/styles';
+import Confirmation from '../popups/Confirmation';
 
 export interface CarProps {
     setPage: (view: JSX.Element) => void;
@@ -39,7 +40,9 @@ export default function Car({setPage, setPopUp, car}: CarProps): JSX.Element {
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.modalText}>Map</Text>
                     </TouchableOpacity>                    
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => {
+                        setPopUp(<Confirmation car={car} setPopUp={setPopUp} setPage={setPage}/>)
+                    }}>
                         <Text style={styles.modalText}>Reserve</Text>
                     </TouchableOpacity>                
                 </View>
@@ -59,8 +62,8 @@ const styles = StyleSheet.create({
         flexDirection :'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '60%',
-        height: '30%',
+        width: '70%',
+        padding: 10,
         top: "40%",
         alignSelf: "center"
     },
@@ -73,8 +76,8 @@ const styles = StyleSheet.create({
     closeButton: {
         zIndex: 1,
         position: "absolute",
-        top: "auto",
-        left: "auto",
+        top: "0%",
+        right: "1%",
         flexDirection: 'row',
         justifyContent: 'flex-end',
     },
@@ -84,21 +87,19 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     modalHeader: {
-        fontSize: 40,
+        fontSize: 30,
         color: 'white',
         fontWeight: 'bold',
     },
     button: {
         margin: 'auto',
-            width: 200,
+            width: 100,
             height: 40,
             backgroundColor: 'rgb(70,88,129)',
             borderRadius: 15,
             marginBottom: 10,
             padding: 8,
             alignItems: 'center',
-            justifyContent: 'center',
-            marginRight: 'auto',
-            marginLeft: 'auto',
-    }
+            justifyContent: 'center'
+        }
   });
