@@ -41,7 +41,7 @@ export default function Car({setPage, setPopUp, car}: CarProps): JSX.Element {
                         <Text style={styles.modalText}>Map</Text>
                     </TouchableOpacity>                    
                     <TouchableOpacity style={styles.button} onPress={() => {
-                        setPopUp(<Confirmation car={car} setPopUp={setPopUp} setPage={setPage}/>)
+                        setPopUp(<Confirmation setPopUp={setPopUp} setPage={setPage} car={car}/>)
                     }}>
                         <Text style={styles.modalText}>Reserve</Text>
                     </TouchableOpacity>                
