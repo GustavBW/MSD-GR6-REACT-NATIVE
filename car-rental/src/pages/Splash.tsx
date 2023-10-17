@@ -3,7 +3,7 @@ import { Animated, Image, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StylingDefaults } from '../ts/styles';
 
-export default function Splash({}: any): JSX.Element {
+export default function Splash({ error }: { error: Error | null }): JSX.Element {
 
     const fadeAnim = React.useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
 
@@ -27,6 +27,7 @@ export default function Splash({}: any): JSX.Element {
                 resizeMode='contain'
             />
             <Text style={styles.title}>Need4Car™</Text>
+            <Text style={styles.error}>{error?.message}</Text>
         </View>
     )
 }
@@ -44,5 +45,10 @@ const styles = StyleSheet.create({
     image: {
         width: "100%",
         height: "20%",
+    },
+    error: {
+        color: "red",
+        textAlign: "center",
+        padding: "10%"
     }
 })

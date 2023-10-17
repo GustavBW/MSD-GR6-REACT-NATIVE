@@ -6,31 +6,32 @@ import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
 import { CarData } from '../ts/types';
 import Login from '../popups/Login';
 import { Menu } from '../popups/Menu';
+import Car from '../popups/Car';
+import CarMap from '../components/CarMap';
 
 export interface HomeProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
     cars: CarData[];
+    selectedCar?: CarData;
 }
 
-export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element {
+export default function Home({setPage, setPopUp, cars, selectedCar}: HomeProps): JSX.Element {
     const [address, setAddress] = React.useState<string>("");
     const [carMarkers, setMarkers] = React.useState<JSX.Element[]>([]);
     const [inputFocused, setInputFocused] = React.useState<boolean>(false);
 
     const getCarMarker = (car: CarData, key: number): JSX.Element => {
-        console.log("Generating marker for car", car)
         return (
-            <></>
-        )
+            <TouchableOpacity key={key} style={{position: "absolute", width: "10%", height: "10%", zIndex: 4}} 
+                onPress={() => {
+                    setPopUp(<Car car={car} setPopUp={setPopUp} setPage={setPage}/>)
+                }}
+            >
+                <FontAwesomeIcon icon={faCarSide} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
+            </TouchableOpacity>
+        );
     }
-    
-    useEffect(() => {
-        console.log("Cars changed, updating markers")
-        const newMarkers = cars.map((car, index) => getCarMarker(car, index));
-        setMarkers(newMarkers);
-        console.log("Markers updated, cars: ", cars, "markers: ", newMarkers)
-    }, [cars]);
 
     const appendOutofBoundsPressCapture = (): JSX.Element => {
         if(inputFocused){
@@ -49,10 +50,11 @@ export default function Home({setPage, setPopUp, cars}: HomeProps): JSX.Element 
     return (
         <SafeAreaView style={styles.homeContainer}>
             {appendOutofBoundsPressCapture()}
-            <Image source={require('./map.png')} 
-                style={styles.mapView}
-                resizeMode='cover'
-            /> 
+            <CarMap cars={cars} 
+                setPopUp={setPopUp} 
+                setPage={setPage} 
+                selectedCar={selectedCar}
+            />
             <View style={styles.lowerMenu}>
                 <TouchableOpacity style={styles.iconButton}
                     onPress={() => {
@@ -98,12 +100,6 @@ const styles = StyleSheet.create({
     homeContainer: {
         flex: 1,
     },
-    mapView: {
-      zIndex: 0,
-      position: "absolute",
-      width: "100%",
-      height: "100%"
-    },
     lowerMenu: {
       position: "absolute",
       bottom: 0,
@@ -130,7 +126,7 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     input: {
-      zIndex: 1,
+      zIndex: 3,
       flex: 2, // Takes up twice the space of the buttons
       paddingHorizontal: 10, // Add horizontal padding for the input
       borderWidth: 1, // Add border for the input
@@ -143,7 +139,6 @@ const styles = StyleSheet.create({
       alignItems: 'center', // Center text vertically
     },
     inputWhenFocused: {
-        zIndex: 2,
         bottom: "100%",
         shadowColor: StylingDefaults.colors.blueDark.hsl,
         shadowOffset: {
@@ -155,7 +150,6 @@ const styles = StyleSheet.create({
         elevation: 5,
         backgroundColor: StylingDefaults.colors.blueBase.hsl,
         width: "100%",
-        
     }
   });
   

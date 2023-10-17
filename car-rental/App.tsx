@@ -7,7 +7,7 @@ import Home from './src/pages/Home';
 import storage from './src/ts/storage';
 import { KnownKeys } from './src/ts/storage';
 import {StylingDefaults} from './src/ts/styles';
-import { createStackNavigator } from 'react-navigation-stack';
+import Splash from './src/pages/Splash';
 
 export default function App() {
   //show loading spinner on null
@@ -15,33 +15,46 @@ export default function App() {
   const [networkError, setNetworkError] = useState<Error | null>(null);
   const [blurPage, setBlurPage] = useState<JSX.Element>(<></>);
   const [popUp, setDialog] = useState<JSX.Element>(<></>);
+  const [currentView, setCurrentView] = useState<JSX.Element>(<Splash error={networkError} />);
 
   React.useEffect(() => {
     const doTheThing = async () => {
-      const localData = await storage.getAllDataForKey(KnownKeys.carData);
-      if(localData.length > 0){
-        console.log("Fetched data from local storage")
-        setCarData(localData as unknown as CarData[]);
+      let cars: CarData[] = [];
+      let serverData: any;
+      try {
+        cars = await storage.getAllDataForKey<CarData>(KnownKeys.carData);
+        if(cars.length > 0){
+          console.log("Fetched data from local storage")
+          setCarData(cars);
+          return;
+        }
+      }catch (error){
+        console.error("Error fetching data from local storage: \n", error);
+        console.log("Fetching data from server instead")
+      }
+      try{
+        serverData = await fetch('http://192.168.0.174:3000/car-data');
+      }catch(networkError){
+        console.log("Error fetching data from server: \n", networkError)
+        console.log((networkError as Error).stack);
+        setNetworkError(networkError as Error);
         return;
       }
-      let serverData;
-      let serverDataJson;
       try{
-        serverData = await fetch('http://localhost:3000/car-data');
-        serverDataJson = await serverData.json();
-        console.log("Fetched data from server")
-        console.table(serverDataJson)
+        cars = await serverData.json();
+        setCarData(cars as CarData[]);
       }catch (error){
+        console.log("Data formatting error: \n", error)
         setNetworkError(error as Error);
         return;
       }
-      setCarData(serverDataJson as CarData[]);
-      await storage.save({
+      storage.save({
         key: KnownKeys.carData,
-        data: serverDataJson
+        data: cars
       });
+      setCurrentView(<Home cars={cars} setPopUp={setPopUp} setPage={setPage} />);
     }
-    doTheThing();
+    setTimeout(doTheThing, 1000);
   },[]);
 
   const setPage = (view: JSX.Element) => {
@@ -59,22 +72,6 @@ export default function App() {
     setBlurPage(<BlurPage />);
   }
 
-  const [currentView, setCurrentView] = useState<JSX.Element>(<Home setPage={setPage} setPopUp={setPopUp} cars={carData}/>);
-  const Stack = createStackNavigator({
-    Home: {
-      screen: Home, 
-      path: "home",
-      params: {
-        setPage: setPage,
-        setPopUp: setPopUp,
-        cars: carData
-      },
-      navigationOptions: {
-        headerShown: false
-      }
-    }
-  });
-  
 
   return (
     <View style={styles.container}>
