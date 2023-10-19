@@ -4,8 +4,9 @@ import { StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import RegisterFirst from "./RegisterFirst";
-import Profile from "../pages/Profile";
-
+import License from "../pages/License";
+/* import ProfilePopUp from "./Profile";
+ */
 interface LoginProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
@@ -65,7 +66,8 @@ export default function Login({
                   onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity style={styles.button} onPress={()=>{
-/*                     setPage(<Profile setPage={setPage} setPopUp={setPopUp}/>); closeLogin()
+                    setPage(<License setPage={setPage} setPopUp={setPopUp}/>);
+/*                     setPopUp(<ProfilePopUp setPage={setPage} setPopUp={setPopUp}/>);
  */                }
                 }>
                   <Text style={styles.buttonText}>Login</Text>
