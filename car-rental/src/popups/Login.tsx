@@ -19,6 +19,7 @@ export default function Login({
 ) : JSX.Element {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [inputsAreValid, setInputsAreValid] = useState(false);
     const [modalVisible, setModalVisible] = useState(true);
     const translateY = useRef(new Animated.Value(0)).current;
     const closeLogin = () => {
@@ -31,6 +32,14 @@ export default function Login({
           setPopUp(<></>);
         });
       };
+    const checkInputs = () => {
+        if(username.length > 0 && password.length > 0){
+            setInputsAreValid(true);
+        }else{
+            setInputsAreValid(false);
+        }
+        return inputsAreValid;
+    }
       return (
         <View style={styles.container}>
           <Modal animationType="slide" transparent={true} visible={modalVisible}>
@@ -66,9 +75,17 @@ export default function Login({
                   onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity style={styles.button} onPress={()=>{
-                    setPage(<License setPage={setPage} setPopUp={setPopUp}/>);
-/*                     setPopUp(<ProfilePopUp setPage={setPage} setPopUp={setPopUp}/>);
- */                }
+                    checkInputs(); // Call the checkInputs function to update inputsAreValid
+                    if (inputsAreValid === true) {
+                      setPage(
+                        <License
+                        setPage={setPage}
+                        setPopUp={setPopUp}
+                        username={username} // Pass username as a prop
+                      />
+                      );
+                    }
+                 }
                 }>
                   <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
