@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Image, StyleSheet, View,TouchableOpacity, TextInput, Text, Modal, Button, Animated } from 'react-native';
+import { Image, StyleSheet, View,TouchableOpacity, TextInput, Text, Modal, Button, Animated, ScrollView } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
 import {
   BottomSheetModal,
@@ -8,15 +8,17 @@ import {
 } from '@gorhom/bottom-sheet';
 import { SafeAreaView } from "react-native-safe-area-context";
 import Home from './Home';
+import Scan from './Scan';
 
 export interface LicenseProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
-    username: string; // Add username as a prop
+    username?: string; // Add username as a prop
+    password?: string;
+    imagePath : string | undefined;
     }
 
-export default function License({setPage,setPopUp,username}:LicenseProps): JSX.Element {
-  const [scannedLicense, setScannedLicense] = useState<string | null>(null);
+export default function License({setPage,setPopUp,username,password,imagePath}:LicenseProps): JSX.Element {
 
   const defaultLicense = require('./drivers-license-default.png');
 
@@ -49,7 +51,7 @@ export default function License({setPage,setPopUp,username}:LicenseProps): JSX.E
       useNativeDriver: true,
     }).start();
   }
-
+  
   // You can set the scannedLicense state based on some condition
   // For example, here I'm setting it to a non-empty string when the scanned license exists
   const checkDriverLicense = () => {
@@ -63,14 +65,14 @@ export default function License({setPage,setPopUp,username}:LicenseProps): JSX.E
     <SafeAreaView style={styles.LicenseContainer} >
              
       <Image
-        style={styles.imageStyle}
-        source={scannedLicense ? { uri: scannedLicense } : defaultLicense}
+        style={imagePath ? styles.imageStyle: styles.DefaultImageStyle}
+        source={imagePath ? { uri: imagePath } : defaultLicense}
       />
 
-      <View style= {styles.driverLicensInputs}>
+      <ScrollView style= {styles.driverLicensInputs}>
         <TouchableOpacity style={styles.closeBtn} onPress= {openLicense}>
                 <Text style={styles.closeBtnText}>X</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
 
         <TextInput
           style={styles.input}
@@ -113,11 +115,7 @@ export default function License({setPage,setPopUp,username}:LicenseProps): JSX.E
           placeholder="ID"
           onChangeText={(text) => setId(text)}
         />
-        
-
-   
-
-      </View>
+      </ScrollView>
       <Modal
         transparent={true}
         visible={isModalVisible}
@@ -158,7 +156,9 @@ export default function License({setPage,setPopUp,username}:LicenseProps): JSX.E
           <View style={styles.settingsContainer}>
             <Text style={styles.informatonTxt}>Settings</Text>
             <View style={styles.drawLine}></View>
-              <TouchableOpacity style={styles.settingsBtns}>
+              <TouchableOpacity style={styles.settingsBtns} onPress={()=>{
+                    setPage(<Scan setPage={setPage} setPopUp={setPopUp} imagePath={imagePath} username={username} password={password}/>);
+                }}>
                 <Text style={styles.settingsBtnsTxt}>
                   (Re-)Scan license
                 </Text>
@@ -178,14 +178,14 @@ export default function License({setPage,setPopUp,username}:LicenseProps): JSX.E
 
               <TouchableOpacity style={styles.settingsBtns}>
                 <Text style={styles.settingsBtnsTxt}>
-                  Pyment method
+                  Payment method
                 </Text>
               </TouchableOpacity>
           </View>
 
           <View style={styles.homePageAndLogOutContainer}>
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={()=>{
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={[]}/>);
+                    setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={[]} imagePath={imagePath} username={username} password={password}/>);
                 }}>
               <Text style={styles.homePageAndLogOutBtnsTxt}>
                 Home Page
@@ -193,7 +193,7 @@ export default function License({setPage,setPopUp,username}:LicenseProps): JSX.E
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={() =>{
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={[]}/>);
+                    setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={[]} imagePath={imagePath} username='' password=''/>);
                   }}>
               <Text style={styles.homePageAndLogOutBtnsTxt}>
                 Log Out
@@ -223,26 +223,30 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: StylingDefaults.colors.test[0],
-    borderRadius: 15
+    backgroundColor: StylingDefaults.colors.blueDark.hsl,
+    borderRadius: 15,
   },
-
-  imageStyle: {
-    width: '100%',
-    height: 300,
+  DefaultImageStyle: {
+    width: 400,
+    height: 400,
     resizeMode: 'contain',
     borderRadius: 15,
-    marginTop: '5%',
+  },
+  imageStyle: {
+    width: 400,
+    height: 400,
+    resizeMode: 'contain',
+    borderRadius: 15,
+    transform: [{rotate: '-90deg'}]
   },
   
   driverLicensInputs: {
     width: '100%',
     backgroundColor: StylingDefaults.colors.blueDark.hsl,
-    overflow: 'scroll',
   },
   input: {
     height: 40,
-    margin: 12,
+    margin: 11,
     borderWidth: 1,
     borderRadius: 15,
     backgroundColor: 'white',
@@ -261,8 +265,8 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     position: 'absolute',
-    top: "1%",
-    right: "1%",
+    top: "2%",
+    right: "2%",
     justifyContent: 'center',
     alignItems: 'center',
   },

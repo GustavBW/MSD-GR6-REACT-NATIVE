@@ -10,11 +10,15 @@ import License from "../pages/License";
 interface LoginProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
+    imagePath?: string;
+    username?: string;
+    password?: string;
 }
 
 export default function Login({
     setPage,
     setPopUp,
+    imagePath,
 }: LoginProps
 ) : JSX.Element {
     const [username, setUsername] = useState("");
@@ -82,6 +86,8 @@ export default function Login({
                         setPage={setPage}
                         setPopUp={setPopUp}
                         username={username} // Pass username as a prop
+                        password={password} // Pass password as a prop
+                        imagePath={imagePath} // Pass imagePath as a prop
                       />
                       );
                     }

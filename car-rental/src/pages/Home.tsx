@@ -8,15 +8,19 @@ import Login from '../popups/Login';
 import { Menu } from '../popups/Menu';
 import Car from '../popups/Car';
 import CarMap from '../components/CarMap';
+import License from './License';
 
 export interface HomeProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
     cars: CarData[];
     selectedCar?: CarData;
+    imagePath?: string;
+    username?: string;
+    password?: string;
 }
 
-export default function Home({setPage, setPopUp, cars, selectedCar}: HomeProps): JSX.Element {
+export default function Home({setPage, setPopUp, cars, selectedCar,imagePath,username,password}: HomeProps): JSX.Element {
     const [address, setAddress] = React.useState<string>("");
     const [carMarkers, setMarkers] = React.useState<JSX.Element[]>([]);
     const [inputFocused, setInputFocused] = React.useState<boolean>(false);
@@ -32,6 +36,8 @@ export default function Home({setPage, setPopUp, cars, selectedCar}: HomeProps):
             </TouchableOpacity>
         );
     }
+
+    console.log("Home page" + imagePath)
 
     const appendOutofBoundsPressCapture = (): JSX.Element => {
         if(inputFocused){
@@ -83,8 +89,12 @@ export default function Home({setPage, setPopUp, cars, selectedCar}: HomeProps):
                 />
                 <TouchableOpacity style={styles.iconButton}
                     onPress={() => {
-                        
-                        setPopUp(<Login setPopUp={setPopUp} setPage={setPage}/>)
+                        if(username && password){
+                            setPage(<License setPage={setPage} setPopUp={setPopUp} username={username} password={password} imagePath={imagePath}/>)
+                        }
+                        else{
+                            setPopUp(<Login setPopUp={setPopUp} setPage={setPage} imagePath={imagePath} username={username} password={password}/>)
+                        }
                     }}
                 >                    
                     <FontAwesomeIcon icon={faUser} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
