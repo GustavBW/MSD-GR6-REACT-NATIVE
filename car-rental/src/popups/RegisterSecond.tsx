@@ -58,23 +58,31 @@ export default function RegisterSecond({
                 onChangeText={(text) => setAddress(text)}
               />
   
-              <TouchableOpacity style={styles.button} onPress={()=>{
+              <TouchableOpacity style={styles.buttonVertical} onPress={()=>{
                     setPage(<Scan setPage={setPage} setPopUp={setPopUp}/>)
                 }}>
                 <Text style={styles.buttonText}>{'Scan license (optional)'}</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.button} onPress={()=>{
-                    setPopUp(<RegisterFirst setPage={setPage} setPopUp={setPopUp}/>)
-                }}>
-                <Text style={styles.buttonText}>Back</Text>
-              </TouchableOpacity>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.buttonHorizontal}
+                  onPress={() => {
+                    setPopUp(<RegisterFirst setPage={setPage} setPopUp={setPopUp} />);
+                  }}
+                >
+                  <Text style={styles.buttonText}>Back</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity style={styles.button} onPress={()=>{
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={[]}/>)
-                }}>
-                <Text style={styles.buttonText}>Confirm</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonHorizontal}
+                  onPress={() => {
+                    setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={[]} />);
+                  }}
+                >
+                  <Text style={styles.buttonText}>Confirm</Text>
+                </TouchableOpacity>
+              </View> 
             </LinearGradient>
           </Animated.View>
         </Modal>
@@ -87,6 +95,10 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
     },
     modal: {
         justifyContent: 'center',
@@ -156,7 +168,7 @@ const styles = StyleSheet.create({
       
     },
 
-    button: {
+    buttonVertical: {
         margin: 'auto',
         width: 200,
         height: 40,
@@ -168,6 +180,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginRight: 'auto',
         marginLeft: 'auto',
+    },
+    buttonHorizontal: {
+      margin: 'auto',
+      width: 95,
+      height: 40,
+      backgroundColor: 'rgb(70,88,129)',
+      borderRadius: 15,
+      flexDirection: 'row',
+      padding: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginHorizontal: 0,
     },
     buttonText: {
         color: 'white',
