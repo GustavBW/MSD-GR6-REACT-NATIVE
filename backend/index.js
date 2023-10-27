@@ -1,9 +1,7 @@
-const app = require('express')().use(require('cors')())
-    .get('/car-data', (req, res) => {
-        console.log("Request for /car-data received from client " + req.ip);
-        const dataCopy = JSON.parse(JSON.stringify(data)).forEach(car => varyCoords(car));
-        res.send(dataCopy);
-    }).listen(3000, () => {console.log(`Example app listening on port 3000`)});
+require('express')().use(require('cors')())
+.get('/car-data', (req, res) => {
+    res.send(data.filter(car => {varyCoords(car); return true}));
+}).listen(3000, () => {console.log(`Backend listening on port 3000`)});
 
 const varyCoords = (car) => {
     const lon = 10.4275;
