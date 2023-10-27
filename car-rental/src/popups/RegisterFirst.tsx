@@ -3,10 +3,14 @@ import { StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import RegisterSecond from "./RegisterSecond";
 import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated,} from "react-native"
+
 interface RegisterFirstProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
 }
+
+
+
 
 export default function RegisterFirst({
     setPage,
@@ -29,6 +33,8 @@ export default function RegisterFirst({
           setPopUp(<></>);
         });
       };
+    
+
     
     return (
       
@@ -70,7 +76,9 @@ export default function RegisterFirst({
               />
   
               <TouchableOpacity style={styles.button} onPress={()=>{
-                    setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp}/>)
+                    if (username && password) {
+                      setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp} username = {username} password = {password}/>)
+                    }  
                 }}>
                 <Text style={styles.buttonText}>Register</Text>
               </TouchableOpacity>

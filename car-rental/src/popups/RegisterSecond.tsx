@@ -5,16 +5,24 @@ import Scan from "../pages/Scan";
 import RegisterFirst from "./RegisterFirst";
 import Home from "../pages/Home";
 import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated,} from "react-native"
+import storage, { KnownKeys } from "../ts/storage";
+
 
 interface RegisterSecondProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
+    username: string,
+    password: string
 }
+
 
 export default function RegisterSecond({
     setPage,
     setPopUp,
+    username,
+    password
 }: RegisterSecondProps
+
 
 ) : JSX.Element {
     const [address, setAddress] = useState("");
@@ -30,6 +38,16 @@ export default function RegisterSecond({
           setPopUp(<></>);
         });
       };
+      const saveRegisteredUser = async () => {
+        if(username && password){
+          try{
+            storage.save({key: KnownKeys.userData, data: {username,password}})
+  
+          } catch(error){
+            console.log(error + "\n user is not registered")
+          }
+        }
+      }
     
     return (
       
