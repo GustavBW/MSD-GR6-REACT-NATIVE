@@ -6,6 +6,7 @@ import BlurPage from './src/components/BlurPage';
 import Home from './src/pages/Home';
 import storage from './src/ts/storage';
 import { KnownKeys } from './src/ts/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StylingDefaults} from './src/ts/styles';
 import Splash from './src/pages/Splash';
 
@@ -21,38 +22,46 @@ export default function App() {
     const doTheThing = async () => {
       let cars: CarData[] = [];
       let serverData: any;
+      let localFound: boolean = false;
       try {
         cars = await storage.getAllDataForKey<CarData>(KnownKeys.carData);
         if(cars.length > 0){
           console.log("Fetched data from local storage")
           setCarData(cars);
-          return;
+          localFound = true;
         }
       }catch (error){
         console.error("Error fetching data from local storage: \n", error);
         console.log("Fetching data from server instead")
       }
-      try{
-        serverData = await fetch('http://192.168.0.167:3000/car-data');
-      }catch(networkError){
-        console.log("Error fetching data from server: \n", networkError)
-        console.log((networkError as Error).stack);
-        setNetworkError(networkError as Error);
-        return;
+      if(!localFound){
+        console.log("No data available locally, fetching from server")
+        try{
+          serverData = await fetch('http://192.168.0.174:3000/car-data');
+        }catch(networkError){
+          console.log("Error fetching data from server: \n", networkError)
+          console.log((networkError as Error).stack);
+          setNetworkError(networkError as Error);
+          return;
+        }
+        try{
+          cars = await serverData.json();
+          const asArray = [];
+          for(let car of cars){
+            asArray.push(car as CarData);
+          }
+          setCarData(cars as CarData[]);
+        }catch (error){
+          console.log("Data formatting error: \n", error)
+          setNetworkError(error as Error);
+          return;
+        }
       }
-      try{
-        cars = await serverData.json();
-        setCarData(cars as CarData[]);
-      }catch (error){
-        console.log("Data formatting error: \n", error)
-        setNetworkError(error as Error);
-        return;
-      }
-      storage.save({
+      await storage.save({
         key: KnownKeys.carData,
-        data: cars
+        data: JSON.stringify(cars)
       });
-      setCurrentView(<Home cars={cars} setPopUp={setPopUp} setPage={setPage} />);
+      setCurrentView(<Home setPopUp={setPopUp} setPage={setPage} />);
     }
     setTimeout(doTheThing, 1000);
   },[]);
