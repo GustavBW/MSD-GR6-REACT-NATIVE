@@ -4,15 +4,17 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Scan from "../pages/Scan";
 import RegisterFirst from "./RegisterFirst";
 import Home from "../pages/Home";
-import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated,} from "react-native"
+import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated} from "react-native"
 import storage, { KnownKeys } from "../ts/storage";
-
+import { User } from "../ts/types";
+import {CheckBox} from '@react-native-community/checkbox';
 
 interface RegisterSecondProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
     username: string,
-    password: string
+    password: string,
+    email: string,
 }
 
 
@@ -20,14 +22,18 @@ export default function RegisterSecond({
     setPage,
     setPopUp,
     username,
-    password
+    password,
+    email
 }: RegisterSecondProps
 
 
 ) : JSX.Element {
-    const [address, setAddress] = useState("");
+    const [address, setAddress] = useState("none");
     const [modalVisible, setModalVisible] = useState(true);
+    const [consentsToToS, setToSConsent] = useState(false);
+    const [wantsNewsletter, setNewsletterRecipient] = useState(false);
     const translateY = useRef(new Animated.Value(0)).current;
+    const [isSelected, setSelection] = useState(false);
     const closeRegister = () => {
         Animated.timing(translateY, {
           toValue: 1000, 
@@ -38,16 +44,27 @@ export default function RegisterSecond({
           setPopUp(<></>);
         });
       };
-      const saveRegisteredUser = async () => {
-        if(username && password){
-          try{
-            storage.save({key: KnownKeys.userData, data: {username,password}})
-  
-          } catch(error){
-            console.log(error + "\n user is not registered")
+    const saveRegisteredUser = async () => {
+      if(username && password){
+        try{
+          const newUser: User = {
+            id: Math.floor(Math.random() * 100000000),
+            licenseId: Math.floor(Math.random() * 100000000),
+            username: username,
+            passwordHash: password,
+            email: email,
+            consentsToToS: consentsToToS,
+            recievesNewsletter: wantsNewsletter,
+            homeAddr: address
           }
+          storage.save({key: KnownKeys.userData, data: newUser})
+          storage.save({key: KnownKeys.isLoggedIn, data: "true"});
+
+        } catch(error){
+          console.log(error + "\n user is not registered")
         }
       }
+    }
     
     return (
       
@@ -75,6 +92,20 @@ export default function RegisterSecond({
                 secureTextEntry={true}
                 onChangeText={(text) => setAddress(text)}
               />
+
+              <CheckBox
+                value={false}
+                onValueChange={setNewsletterRecipient}
+                style={styles.checkbox}
+              >
+                <Text>Do send me your newsletter</Text>
+              </CheckBox>
+              <CheckBox
+                    value={consentsToToS}
+                    onValueChange={setSelection}
+                    style={styles.checkbox}
+              />
+              <Text>I've read and understood the ToS</Text>
   
               <TouchableOpacity style={styles.buttonVertical} onPress={()=>{
                     setPage(<Scan setPage={setPage} setPopUp={setPopUp}/>)
@@ -95,7 +126,8 @@ export default function RegisterSecond({
                 <TouchableOpacity
                   style={styles.buttonHorizontal}
                   onPress={() => {
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={[]} />);
+                    saveRegisteredUser();
+                    setPage(<Home setPage={setPage} setPopUp={setPopUp}/>);
                   }}
                 >
                   <Text style={styles.buttonText}>Confirm</Text>

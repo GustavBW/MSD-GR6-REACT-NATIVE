@@ -21,7 +21,7 @@ export default function Home({setPage, setPopUp, selectedCar}: HomeProps): JSX.E
     const [address, setAddress] = React.useState<string>("");
     const [inputFocused, setInputFocused] = React.useState<boolean>(false);
     const [cars, setCars] = React.useState<CarData[]>([]);
-    const [userData, setUserData] = React.useState<User | undefined>();
+    const [isLoggedIn, setLoggedIn] = React.useState<String>("false");
 
     React.useEffect(() => {
         const loadCars = async () => {
@@ -29,11 +29,18 @@ export default function Home({setPage, setPopUp, selectedCar}: HomeProps): JSX.E
             const fullParsed = await JSON.parse(fromStorage);
             setCars(fullParsed)
             try{
-                setUserData(await storage.load<User>({key: KnownKeys.userData}))
+                console.log(isLoggedIn);
+                
             }catch(ignored){}
         }
         loadCars()
     }, [])
+
+    const loadLoggedIn = async ()=>{
+        const loadLoggedIn = await storage.load<String>({key: KnownKeys.isLoggedIn});
+        setLoggedIn(loadLoggedIn)
+    }
+    loadLoggedIn();
 
     const appendOutofBoundsPressCapture = (): JSX.Element => {
         if(inputFocused){
@@ -85,7 +92,8 @@ export default function Home({setPage, setPopUp, selectedCar}: HomeProps): JSX.E
                 />
                 <TouchableOpacity style={styles.iconButton}
                     onPress={() => {
-                        if(userData){
+                        loadLoggedIn();     
+                        if(isLoggedIn == "true"){
                             setPage(<License setPage={setPage} setPopUp={setPopUp}/>)
                         }
                         else{

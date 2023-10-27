@@ -1,30 +1,32 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated } from "react-native"
 import { StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import RegisterFirst from "./RegisterFirst";
 import License from "../pages/License";
+import storage, { KnownKeys } from "../ts/storage";
+import { User } from "../ts/types";
 /* import ProfilePopUp from "./Profile";
  */
 interface LoginProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
-    imagePath?: string;
-    username?: string;
-    password?: string;
+
 }
 
 export default function Login({
     setPage,
     setPopUp,
-    imagePath,
+    
 }: LoginProps
 ) : JSX.Element {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [token, setToken] = useState("");
     const [inputsAreValid, setInputsAreValid] = useState(false);
     const [modalVisible, setModalVisible] = useState(true);
+    const [userData, setUserData] = useState<User | undefined>()
     const translateY = useRef(new Animated.Value(0)).current;
     const closeLogin = () => {
         Animated.timing(translateY, {
@@ -36,14 +38,18 @@ export default function Login({
           setPopUp(<></>);
         });
       };
-    const checkInputs = () => {
-        if(username.length > 0 && password.length > 0){
-            setInputsAreValid(true);
-        }else{
-            setInputsAreValid(false);
-        }
-        return inputsAreValid;
+      
+    useEffect( () => {
+      const loadUserData = async () => {
+        try{
+          setUserData(await storage.load<User | undefined>({ key: KnownKeys.userData }))
+        }catch(ignored){}
+      }
+      loadUserData();
     }
+
+    )
+    
       return (
         <View style={styles.container}>
           <Modal animationType="slide" transparent={true} visible={modalVisible}>
@@ -79,18 +85,10 @@ export default function Login({
                   onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity style={styles.button} onPress={()=>{
-                    checkInputs(); // Call the checkInputs function to update inputsAreValid
-                    if (inputsAreValid === true) {
-                      setPage(
-                        <License
-                        setPage={setPage}
-                        setPopUp={setPopUp}
-                        username={username} // Pass username as a prop
-                        password={password} // Pass password as a prop
-                        imagePath={imagePath} // Pass imagePath as a prop
-                      />
-                      );
-                    }
+                  if(userData && username == userData.username && password == userData.passwordHash){
+                    storage.save({key: KnownKeys.isLoggedIn, data: "true"});
+                    setPage( <License setPage={setPage} setPopUp={setPopUp} /> );
+                  }
                  }
                 }>
                   <Text style={styles.buttonText}>Login</Text>
