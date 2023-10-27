@@ -58,17 +58,23 @@ const cameraRef = useRef<Camera | null>(null);
         }
         console.log('Photo saved to album!');
         console.log('Photo: ', asset);
-        
-        storage.save({key: KnownKeys.licenseImage, data: asset})
-        
-        setPhoto(asset);
+  
+        // Save the image data with the key
+        storage.save({ key: KnownKeys.licenseImage, data: asset });
+  
+        // Load the saved image data and log it
+        const loadedImage = await storage.load<MediaLibrary.Asset>({ key: KnownKeys.licenseImage });
+        console.log('Loaded Image: ', loadedImage);
+  
+  
+        setPhoto(loadedImage);
         setIsPreviewing(false);
       } catch (error) {
         console.error(`Error saving image: ${error}`);
       }
     }
   };
-
+  
   if (hasCameraPermission === undefined) {
     return <Text>Requesting permissions...</Text>
   } else if (!hasCameraPermission) {

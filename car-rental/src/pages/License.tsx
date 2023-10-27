@@ -35,10 +35,20 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
 
   React.useEffect(() => {
     const loadLicenseData = async () => {
-      setLicenseData(await storage.load<LicenseLocal>({key: KnownKeys.licenseData}))
-      setUserData(await storage.load<User>({key: KnownKeys.userData}))
-      setLicenseImage(await storage.load<MediaLibrary.Asset>({key: KnownKeys.licenseImage}))
-    }
+      try{
+        setUserData(await storage.load<User>({ key: KnownKeys.userData }));
+      }catch(error){
+        console.error('user not found')
+      }
+      try {
+        setLicenseData(await storage.load<LicenseLocal>({ key: KnownKeys.licenseData }));
+        const loadedImage = await storage.load<MediaLibrary.Asset>({ key: KnownKeys.licenseImage });
+        setLicenseImage(loadedImage);
+      } catch (error) {
+        console.error(`Error loading image: ${error}`);
+      }
+    };
+    
     loadLicenseData();
   }, [])
 
