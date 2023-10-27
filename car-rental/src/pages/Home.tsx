@@ -19,30 +19,21 @@ export interface HomeProps {
 
 export default function Home({setPage, setPopUp, selectedCar}: HomeProps): JSX.Element {
     const [address, setAddress] = React.useState<string>("");
-    const [carMarkers, setMarkers] = React.useState<JSX.Element[]>([]);
     const [inputFocused, setInputFocused] = React.useState<boolean>(false);
     const [cars, setCars] = React.useState<CarData[]>([]);
     const [userData, setUserData] = React.useState<User | undefined>();
 
     React.useEffect(() => {
         const loadCars = async () => {
-            setCars(await storage.getAllDataForKey<CarData>(KnownKeys.carData))
-            setUserData(await storage.load<User>({key: KnownKeys.userData}))
+            const fromStorage = await storage.load<string>({key: KnownKeys.carData});
+            const fullParsed = await JSON.parse(fromStorage);
+            setCars(fullParsed)
+            try{
+                setUserData(await storage.load<User>({key: KnownKeys.userData}))
+            }catch(ignored){}
         }
         loadCars()
     }, [])
-
-    const getCarMarker = (car: CarData, key: number): JSX.Element => {
-        return (
-            <TouchableOpacity key={key} style={{position: "absolute", width: "10%", height: "10%", zIndex: 4}} 
-                onPress={() => {
-                    setPopUp(<Car car={car} setPopUp={setPopUp} setPage={setPage}/>)
-                }}
-            >
-                <FontAwesomeIcon icon={faCarSide} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
-            </TouchableOpacity>
-        );
-    }
 
     const appendOutofBoundsPressCapture = (): JSX.Element => {
         if(inputFocused){

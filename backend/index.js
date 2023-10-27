@@ -127,16 +127,19 @@ const data = [
   }]
 
 app.get('/car-data', (req, res) => {
+    console.log("Request for /car-data received from client " + req.ip)
+
     const lon = 10.4275;
     const lat = 55.439;
     const maxVar = .4;
+    const dataCopy = JSON.parse(JSON.stringify(data));
 
     data.forEach(car => {
         car.lat = lat + Math.random() * maxVar - maxVar / 2;
         car.lon = lon + Math.random() * maxVar - maxVar / 2;
     });
 
-    res.send(data);
+    res.send(dataCopy);
 })
 
 app.listen(port, () => {
