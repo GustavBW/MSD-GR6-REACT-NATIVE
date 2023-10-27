@@ -19,7 +19,7 @@ export default function App() {
   const [currentView, setCurrentView] = useState<JSX.Element>(<Splash error={networkError} />);
 
   React.useEffect(() => {
-    const doTheThing = async () => {
+    const fetchBackendData = async () => {
       let cars: CarData[] = [];
       let serverData: any;
       let localFound: boolean = false;
@@ -63,7 +63,7 @@ export default function App() {
       });
       setCurrentView(<Home setPopUp={setPopUp} setPage={setPage} />);
     }
-    setTimeout(doTheThing, 1000);
+    fetchBackendData();
   },[]);
 
   const setPage = (view: JSX.Element) => {
