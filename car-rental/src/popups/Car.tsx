@@ -6,6 +6,8 @@ import { CarData } from '../ts/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StylingDefaults } from '../ts/styles';
 import Confirmation from '../popups/Confirmation';
+import { Menu } from './Menu';
+import Home from '../pages/Home';
 
 export interface CarProps {
     setPage: (view: JSX.Element) => void;
@@ -37,7 +39,9 @@ export default function Car({setPage, setPopUp, car}: CarProps): JSX.Element {
                         <Text style={styles.modalText}>{car.dkkPrKm} dkk</Text>
                     </View>
                     <View style={styles.row}>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => {
+                        setPage(<Home setPopUp={setPopUp} setPage={setPage} selectedCar={car}/>)
+                    }}>
                         <Text style={styles.modalText}>Map</Text>
                     </TouchableOpacity>                    
                     <TouchableOpacity style={styles.button} onPress={() => {
