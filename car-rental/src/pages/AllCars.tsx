@@ -43,7 +43,7 @@ export default function AllCars({cars, setPage, setPopUp}: AllCars){
                     />
                 </View>
                 <View style={styles.xButtonSpacer}>
-                    <Pressable onPress={() => setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={cars}/>)}>
+                    <Pressable onPress={() => setPage(<Home setPage={setPage} setPopUp={setPopUp}/>)}>
                         <FontAwesomeIcon icon={faCircleXmark} size={60} color="black" />
                     </Pressable>
                 </View>

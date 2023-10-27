@@ -1,24 +1,19 @@
 import React, { useMemo, useState } from 'react';
 import { Image, StyleSheet, View,TouchableOpacity, TextInput, Text, Modal, Button, Animated, ScrollView } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
-import {
-  BottomSheetModal,
-  BottomSheetBackdrop,
-  BottomSheetBackdropProps,
-} from '@gorhom/bottom-sheet';
 import { SafeAreaView } from "react-native-safe-area-context";
 import Home from './Home';
 import Scan from './Scan';
+import { CarData, LicenseLocal, User } from '../ts/types';
+import storage, { KnownKeys } from "../ts/storage";
+import * as MediaLibrary from 'expo-media-library';
 
 export interface LicenseProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
-    username?: string; // Add username as a prop
-    password?: string;
-    imagePath : string | undefined;
-    }
+}
 
-export default function License({setPage,setPopUp,username,password,imagePath}:LicenseProps): JSX.Element {
+export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
 
   const defaultLicense = require('./drivers-license-default.png');
 
@@ -29,11 +24,36 @@ export default function License({setPage,setPopUp,username,password,imagePath}:L
   const [nationality, setNationality] = useState<string>('');
   const [cpr, setCpr] = useState<string>('');
   const [id, setId] = useState<string>('');
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
   const [isModalVisible, setIsModalVisible] = useState(true);
   const translateY = useState(new Animated.Value(0))[0];
+  const [email, setEmail] = useState<string|null>('');
+  const [changeEmail, isEmailView] = useState(false);
+  const [licenseData, setLicenseData] = useState<LicenseLocal | undefined>();
+  const [userData, setUserData] = useState<User>();
+  const [licenseImage, setLicenseImage] = useState<MediaLibrary.Asset | undefined>();
+
+
+  React.useEffect(() => {
+    const loadLicenseData = async () => {
+      setLicenseData(await storage.load<LicenseLocal>({key: KnownKeys.licenseData}))
+      setUserData(await storage.load<User>({key: KnownKeys.userData}))
+      setLicenseImage(await storage.load<MediaLibrary.Asset>({key: KnownKeys.licenseImage}))
+    }
+    loadLicenseData();
+  }, [])
 
   const closeLicense = () => {
+    storage.save({key: KnownKeys.licenseData, data: {
+      expirationDate: expirationDate,
+      creationDate: creationDate,
+      surname: surname,
+      name: name,
+      nationality: nationality,
+      cpr: cpr,
+      id: id,
+      userId: userData?.id,
+      pictureUrl: licenseImage?.uri
+    }})
     Animated.timing(translateY, {
       toValue: 1000, 
       duration: 100,
@@ -51,22 +71,18 @@ export default function License({setPage,setPopUp,username,password,imagePath}:L
       useNativeDriver: true,
     }).start();
   }
-  
-  // You can set the scannedLicense state based on some condition
-  // For example, here I'm setting it to a non-empty string when the scanned license exists
-  const checkDriverLicense = () => {
-    
-    /* if ("ok" button pressed) {
-      setScannedLicense('./drivers-license.png');
-    } */
-  };
+
+  const changeEmailView = () => {
+    isEmailView(true);
+  }
+
 
   return (
     <SafeAreaView style={styles.LicenseContainer} >
              
       <Image
-        style={imagePath ? styles.imageStyle: styles.DefaultImageStyle}
-        source={imagePath ? { uri: imagePath } : defaultLicense}
+        style={licenseImage ? styles.imageStyle: styles.DefaultImageStyle}
+        source={licenseImage ? { uri: licenseImage.uri } : defaultLicense}
       />
 
       <ScrollView style= {styles.driverLicensInputs}>
@@ -126,7 +142,7 @@ export default function License({setPage,setPopUp,username,password,imagePath}:L
           <View style={styles.modalTitle}>
               <Text style={styles.modalTitleText}>
                 {/* get the username value */}
-                {username}
+                {userData?.username}
               </Text>
               <TouchableOpacity style={styles.modalCloseBtn} onPress={closeLicense}>
                 <Text style = {styles.modalCloseBtnText} >
@@ -149,7 +165,7 @@ export default function License({setPage,setPopUp,username,password,imagePath}:L
             <View style={styles.usernameContainer}>
               <Text style={styles.usernameTxt}>Username:</Text>
               <View style={styles.drawBox}>
-                <Text>{username}</Text>
+                <Text>{userData?.username}</Text>
               </View>
             </View>
           </View>
@@ -157,7 +173,7 @@ export default function License({setPage,setPopUp,username,password,imagePath}:L
             <Text style={styles.informatonTxt}>Settings</Text>
             <View style={styles.drawLine}></View>
               <TouchableOpacity style={styles.settingsBtns} onPress={()=>{
-                    setPage(<Scan setPage={setPage} setPopUp={setPopUp} imagePath={imagePath} username={username} password={password}/>);
+                    setPage(<Scan setPage={setPage} setPopUp={setPopUp}/>);
                 }}>
                 <Text style={styles.settingsBtnsTxt}>
                   (Re-)Scan license
@@ -185,15 +201,15 @@ export default function License({setPage,setPopUp,username,password,imagePath}:L
 
           <View style={styles.homePageAndLogOutContainer}>
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={()=>{
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={[]} imagePath={imagePath} username={username} password={password}/>);
+                    setPage(<Home setPage={setPage} setPopUp={setPopUp}/>);
                 }}>
               <Text style={styles.homePageAndLogOutBtnsTxt}>
-                Home Page
+                Home
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={() =>{
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp} cars={[]} imagePath={imagePath} username='' password=''/>);
+                    setPage(<Home setPage={setPage} setPopUp={setPopUp} />);
                   }}>
               <Text style={styles.homePageAndLogOutBtnsTxt}>
                 Log Out
@@ -205,31 +221,23 @@ export default function License({setPage,setPopUp,username,password,imagePath}:L
         </View>
       </Modal>
 
-
-     
-
-
-
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   LicenseContainer: {
-    position: 'relative',
     width: '100%',
     height: '100%',
     flexDirection: 'column',
-    flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: StylingDefaults.colors.blueDark.hsl,
     borderRadius: 15,
   },
   DefaultImageStyle: {
-    width: 400,
-    height: 400,
-    resizeMode: 'contain',
+    width: '100%',
+    height: 300,
     borderRadius: 15,
   },
   imageStyle: {

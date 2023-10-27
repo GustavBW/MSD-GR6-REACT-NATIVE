@@ -2,26 +2,23 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, TouchableOpacity, Image, Button } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
 import License from './License';
+import storage,{KnownKeys} from '../../src/ts/storage'
+import * as MediaLibrary from 'expo-media-library';
+import { CarData } from '../ts/types';
 
 interface ScanProps {
   setPage: (view: JSX.Element) => void;
   setPopUp: (view: JSX.Element) => void;
-  username?: string;
-  password?: string;
-  imagePath : string | undefined;
 }
 
-export default function Scan({ setPage, setPopUp,username,password,imagePath }: ScanProps): JSX.Element {
+export default function Scan({ setPage, setPopUp }: ScanProps): JSX.Element {
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState<boolean | null>(null);
-  const [isFrontCamera, setIsFrontCamera] = useState(false);
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-/*   const [photo, setPhoto] = useState<FileSystem.FileInfo | undefined>();
- */  
-const [photo, setPhoto] = useState<FileSystem.FileInfo | undefined>();
+ 
+const [photo, setPhoto] = useState<MediaLibrary.Asset | undefined>();
 const cameraRef = useRef<Camera | null>(null);
 
   useEffect(() => {
@@ -50,19 +47,21 @@ const cameraRef = useRef<Camera | null>(null);
     if (capturedImage) {
       try {
         console.log('Saving image...');
-        const asset:any = await MediaLibrary.createAssetAsync(capturedImage);
-        const album = await MediaLibrary.getAlbumAsync('YourAlbumName');
+        const asset: MediaLibrary.Asset = await MediaLibrary.createAssetAsync(capturedImage);
+        const album = await MediaLibrary.getAlbumAsync('driverLicense');
         if (album) {
           await MediaLibrary.addAssetsToAlbumAsync([asset], album);
           console.log('Photo added to album!');
         } else {
           // If the album doesn't exist, you can create it
-          const newAlbum = await MediaLibrary.createAlbumAsync('YourAlbumName', asset, false);
+          const newAlbum = await MediaLibrary.createAlbumAsync('driverLicense', asset, false);
         }
         console.log('Photo saved to album!');
         console.log('Photo: ', asset);
+        
+        storage.save({key: KnownKeys.licenseImage, data: asset})
+        
         setPhoto(asset);
-        imagePath = asset.uri;
         setIsPreviewing(false);
       } catch (error) {
         console.error(`Error saving image: ${error}`);
@@ -85,15 +84,13 @@ const cameraRef = useRef<Camera | null>(null);
             <Button title="Scan Again" onPress={resetPreview} />
             <Button title="Save" onPress= {() =>{
               saveImage().then(() => {
-                console.log("username: ", username);
-                console.log("imagePath: ", imagePath);
-                setPage(<License setPage={setPage} setPopUp={setPopUp} imagePath={imagePath} username={username} password={password} />);
+                setPage(<License setPage={setPage} setPopUp={setPopUp}/>);
               });
             }} />
           </View>
         </View>
       ) : (
-        <Camera style={{ flex: 1 }} type={isFrontCamera ? CameraType.front : CameraType.back} ref={cameraRef}>
+        <Camera style={{ flex: 1 }} type={CameraType.back} ref={cameraRef}>
           <View
             style={{
               flex: 1,
@@ -101,20 +98,6 @@ const cameraRef = useRef<Camera | null>(null);
               flexDirection: 'row',
             }}
           >
-            <TouchableOpacity
-              style={{
-                flex: 0.1,
-                alignSelf: 'flex-end',
-                alignItems: 'center',
-              }}
-              onPress={() => {
-                setIsFrontCamera(!isFrontCamera);
-              }}
-            >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                Flip
-              </Text>
-            </TouchableOpacity>
           </View>
         </Camera>
       )}

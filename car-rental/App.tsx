@@ -33,7 +33,7 @@ export default function App() {
         console.log("Fetching data from server instead")
       }
       try{
-        serverData = await fetch('http://192.168.0.100:3000/car-data');
+        serverData = await fetch('http://192.168.0.210:3000/car-data');
       }catch(networkError){
         console.log("Error fetching data from server: \n", networkError)
         console.log((networkError as Error).stack);
@@ -52,7 +52,7 @@ export default function App() {
         key: KnownKeys.carData,
         data: cars
       });
-      setCurrentView(<Home cars={cars} setPopUp={setPopUp} setPage={setPage} />);
+      setCurrentView(<Home setPopUp={setPopUp} setPage={setPage} />);
     }
     setTimeout(doTheThing, 1000);
   },[]);
