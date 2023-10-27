@@ -4,20 +4,26 @@ import { StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import RegisterFirst from "./RegisterFirst";
-import Profile from "../pages/Profile";
-
+import License from "../pages/License";
+/* import ProfilePopUp from "./Profile";
+ */
 interface LoginProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
+    imagePath?: string;
+    username?: string;
+    password?: string;
 }
 
 export default function Login({
     setPage,
     setPopUp,
+    imagePath,
 }: LoginProps
 ) : JSX.Element {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [inputsAreValid, setInputsAreValid] = useState(false);
     const [modalVisible, setModalVisible] = useState(true);
     const translateY = useRef(new Animated.Value(0)).current;
     const closeLogin = () => {
@@ -30,6 +36,14 @@ export default function Login({
           setPopUp(<></>);
         });
       };
+    const checkInputs = () => {
+        if(username.length > 0 && password.length > 0){
+            setInputsAreValid(true);
+        }else{
+            setInputsAreValid(false);
+        }
+        return inputsAreValid;
+    }
       return (
         <View style={styles.container}>
           <Modal animationType="slide" transparent={true} visible={modalVisible}>
@@ -65,8 +79,19 @@ export default function Login({
                   onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity style={styles.button} onPress={()=>{
-/*                     setPage(<Profile setPage={setPage} setPopUp={setPopUp}/>); closeLogin()
- */                }
+                    checkInputs(); // Call the checkInputs function to update inputsAreValid
+                    if (inputsAreValid === true) {
+                      setPage(
+                        <License
+                        setPage={setPage}
+                        setPopUp={setPopUp}
+                        username={username} // Pass username as a prop
+                        password={password} // Pass password as a prop
+                        imagePath={imagePath} // Pass imagePath as a prop
+                      />
+                      );
+                    }
+                 }
                 }>
                   <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>

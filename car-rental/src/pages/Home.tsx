@@ -3,23 +3,34 @@ import { TouchableOpacity, Image, Pressable, StyleSheet, SafeAreaView, TextInput
 import { StylingDefaults } from '../ts/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
-import { CarData } from '../ts/types';
+import { CarData, User } from '../ts/types';
 import Login from '../popups/Login';
 import { Menu } from '../popups/Menu';
 import Car from '../popups/Car';
 import CarMap from '../components/CarMap';
+import License from './License';
+import storage, {KnownKeys} from '../ts/storage';
 
 export interface HomeProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
-    cars: CarData[];
     selectedCar?: CarData;
 }
 
-export default function Home({setPage, setPopUp, cars, selectedCar}: HomeProps): JSX.Element {
+export default function Home({setPage, setPopUp, selectedCar}: HomeProps): JSX.Element {
     const [address, setAddress] = React.useState<string>("");
     const [carMarkers, setMarkers] = React.useState<JSX.Element[]>([]);
     const [inputFocused, setInputFocused] = React.useState<boolean>(false);
+    const [cars, setCars] = React.useState<CarData[]>([]);
+    const [userData, setUserData] = React.useState<User | undefined>();
+
+    React.useEffect(() => {
+        const loadCars = async () => {
+            setCars(await storage.getAllDataForKey<CarData>(KnownKeys.carData))
+            setUserData(await storage.load<User>({key: KnownKeys.userData}))
+        }
+        loadCars()
+    }, [])
 
     const getCarMarker = (car: CarData, key: number): JSX.Element => {
         return (
@@ -83,8 +94,12 @@ export default function Home({setPage, setPopUp, cars, selectedCar}: HomeProps):
                 />
                 <TouchableOpacity style={styles.iconButton}
                     onPress={() => {
-                        
-                        setPopUp(<Login setPopUp={setPopUp} setPage={setPage}/>)
+                        if(userData){
+                            setPage(<License setPage={setPage} setPopUp={setPopUp}/>)
+                        }
+                        else{
+                            setPopUp(<Login setPopUp={setPopUp} setPage={setPage}/>)
+                        }
                     }}
                 >                    
                     <FontAwesomeIcon icon={faUser} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
