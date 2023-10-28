@@ -85,9 +85,6 @@ export default function Login({
                         <License
                         setPage={setPage}
                         setPopUp={setPopUp}
-                        username={username} // Pass username as a prop
-                        password={password} // Pass password as a prop
-                        imagePath={imagePath} // Pass imagePath as a prop
                       />
                       );
                     }
