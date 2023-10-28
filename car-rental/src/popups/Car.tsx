@@ -52,10 +52,10 @@ export default function Car({setPage, setPopUp, car}: CarProps): JSX.Element {
                     </TouchableOpacity>                    
                     <TouchableOpacity style={styles.button} onPress={() => {
                         if(isLoggedIn == "true"){
-                            setPage(<PaymentSecond setPage={setPage} setPopUp={setPopUp} />)
+                            setPage(<PaymentSecond setPage={setPage} setPopUp={setPopUp} car={car}/>)
                             return;
                         }
-                        setPage(<PaymentFirst setPage={setPage} setPopUp={setPopUp} />)
+                        setPage(<PaymentFirst setPage={setPage} setPopUp={setPopUp} car={car} />)
                     }}>
                         <Text style={styles.modalText}>Reserve</Text>
                     </TouchableOpacity>                
