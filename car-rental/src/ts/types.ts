@@ -27,6 +27,7 @@ export type User = {
     licenseId: number;
     username: string;
     passwordHash: string;
+    email: string;
     consentsToToS: boolean;
     recievesNewsletter: boolean;
     homeAddr: string;

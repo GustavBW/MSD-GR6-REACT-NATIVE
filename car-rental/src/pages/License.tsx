@@ -168,7 +168,7 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
             <View style={styles.emailContainer}>
               <Text style={styles.emailTxt}>Email:</Text>
               <View style={styles.drawBox}>
-                <Text>Emailvalue</Text>
+                <Text>{userData?.email}</Text>
               </View>
             </View>
 
@@ -219,7 +219,9 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={() =>{
+                    storage.save({key: KnownKeys.isLoggedIn, data: "false"})
                     setPage(<Home setPage={setPage} setPopUp={setPopUp} />);
+                    
                   }}>
               <Text style={styles.homePageAndLogOutBtnsTxt}>
                 Log Out

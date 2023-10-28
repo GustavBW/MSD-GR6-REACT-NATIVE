@@ -3,10 +3,14 @@ import { StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import RegisterSecond from "./RegisterSecond";
 import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated,} from "react-native"
+
 interface RegisterFirstProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
 }
+
+
+
 
 export default function RegisterFirst({
     setPage,
@@ -16,6 +20,7 @@ export default function RegisterFirst({
 ) : JSX.Element {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
     const [retypedPassword, setRetypedPassword] = useState("");
     const [modalVisible, setModalVisible] = useState(true);
     const translateY = useRef(new Animated.Value(0)).current;
@@ -29,6 +34,8 @@ export default function RegisterFirst({
           setPopUp(<></>);
         });
       };
+    
+
     
     return (
       
@@ -58,6 +65,12 @@ export default function RegisterFirst({
               />
               <TextInput
                 style={styles.input}
+                placeholder="email"
+                secureTextEntry={true}
+                onChangeText={(text) => setEmail(text)}
+              />
+              <TextInput
+                style={styles.input}
                 placeholder="Password"
                 secureTextEntry={true}
                 onChangeText={(text) => setPassword(text)}
@@ -70,7 +83,9 @@ export default function RegisterFirst({
               />
   
               <TouchableOpacity style={styles.button} onPress={()=>{
-                    setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp}/>)
+                    if (username && password) {
+                      setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp} username={username} password={password} email={email}/>)
+                    }  
                 }}>
                 <Text style={styles.buttonText}>Register</Text>
               </TouchableOpacity>
