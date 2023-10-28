@@ -17,6 +17,7 @@ export default function Scan({ setPage, setPopUp }: ScanProps): JSX.Element {
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState<boolean | null>(null);
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [isLoggedIn, setLoggedIn] = useState<String>("false");
  
 const [photo, setPhoto] = useState<MediaLibrary.Asset | undefined>();
 const cameraRef = useRef<Camera | null>(null);
@@ -27,7 +28,7 @@ const cameraRef = useRef<Camera | null>(null);
       const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
       setHasCameraPermission(cameraPermission.status === 'granted');
       setHasMediaLibraryPermission(mediaLibraryPermission.status === 'granted');
-    })();
+      })();
   }, []);
 
   const takePicture = async () => {
@@ -82,7 +83,7 @@ const cameraRef = useRef<Camera | null>(null);
   }
 
   return (
-    <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
       {isPreviewing ? (
         <View style={{ flex: 1 }}>
           {capturedImage && <Image source={{ uri: capturedImage }} style={{ flex: 1 }} />}
@@ -90,7 +91,7 @@ const cameraRef = useRef<Camera | null>(null);
             <Button title="Scan Again" onPress={resetPreview} />
             <Button title="Save" onPress= {() =>{
               saveImage().then(() => {
-                setPage(<License setPage={setPage} setPopUp={setPopUp}/>);
+                  setPage(<License setPage={setPage} setPopUp={setPopUp}/>);
               });
             }} />
           </View>

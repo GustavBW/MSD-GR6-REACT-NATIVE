@@ -64,9 +64,8 @@ export default function RegisterFirst({
                 onChangeText={(text) => setUsername(text)}
               />
               <TextInput
-                style={styles.input}
+                style={styles.input}                
                 placeholder="email"
-                secureTextEntry={true}
                 onChangeText={(text) => setEmail(text)}
               />
               <TextInput

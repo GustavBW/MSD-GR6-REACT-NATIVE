@@ -7,6 +7,8 @@ import Scan from './Scan';
 import { CarData, LicenseLocal, User } from '../ts/types';
 import storage, { KnownKeys } from "../ts/storage";
 import * as MediaLibrary from 'expo-media-library';
+import EmailComponent from '../components/EmailComponent';
+import PasswordComponent from '../components/PasswordComponent';
 
 export interface LicenseProps {
     setPage: (view: JSX.Element) => void;
@@ -27,19 +29,16 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
   const [isModalVisible, setIsModalVisible] = useState(true);
   const translateY = useState(new Animated.Value(0))[0];
   const [email, setEmail] = useState<string|null>('');
-  const [changeEmail, isEmailView] = useState(false);
+  const [password, setPassword] = useState<string|null>('');
+  const [emailView, setEmailView] = useState(false);
+  const [passwordView, setPasswordView] = useState(false);
   const [licenseData, setLicenseData] = useState<LicenseLocal | undefined>();
   const [userData, setUserData] = useState<User>();
   const [licenseImage, setLicenseImage] = useState<MediaLibrary.Asset | undefined>();
 
-
+  
   React.useEffect(() => {
     const loadLicenseData = async () => {
-      try{
-        setUserData(await storage.load<User>({ key: KnownKeys.userData }));
-      }catch(error){
-        console.error('user not found')
-      }
       try {
         setLicenseData(await storage.load<LicenseLocal>({ key: KnownKeys.licenseData }));
         const loadedImage = await storage.load<MediaLibrary.Asset>({ key: KnownKeys.licenseImage });
@@ -48,10 +47,16 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
         console.error(`Error loading image: ${error}`);
       }
     };
-    
     loadLicenseData();
   }, [])
-
+  const loadUserData = async () => {
+    try{
+      setUserData(await storage.load<User>({ key: KnownKeys.userData }));
+    }catch(error){
+      console.error('user not found')
+    }
+  }
+  loadUserData();
   const closeLicense = () => {
     storage.save({key: KnownKeys.licenseData, data: {
       expirationDate: expirationDate,
@@ -82,21 +87,28 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
     }).start();
   }
 
-  const changeEmailView = () => {
-    isEmailView(true);
-  }
+const toggleEmailView = (show: boolean) => {
+  setEmailView(show);
+  loadUserData();
+};
+
+const togglePasswordView = (show: boolean) => {
+  setPasswordView(show);
+  loadUserData();
+};
+
+
 
 
   return (
     <SafeAreaView style={styles.LicenseContainer} >
-             
       <Image
         style={licenseImage ? styles.imageStyle: styles.DefaultImageStyle}
         source={licenseImage ? { uri: licenseImage.uri } : defaultLicense}
       />
 
       <ScrollView style= {styles.driverLicensInputs}>
-        <TouchableOpacity style={styles.closeBtn} onPress= {openLicense}>
+        <TouchableOpacity style={styles.closeBtn} onPress={openLicense}>
                 <Text style={styles.closeBtnText}>X</Text>
         </TouchableOpacity> 
 
@@ -148,10 +160,10 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
         animationType="slide"
         style={styles.modalContainer}
       >
+        
         <View style={styles.modalContent}>
           <View style={styles.modalTitle}>
               <Text style={styles.modalTitleText}>
-                {/* get the username value */}
                 {userData?.username}
               </Text>
               <TouchableOpacity style={styles.modalCloseBtn} onPress={closeLicense}>
@@ -161,18 +173,23 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
               </TouchableOpacity>
           </View>
 
-          <View style={styles.informationContainer}>
-            <Text style={styles.informatonTxt}>Information</Text>
-            <View style={styles.drawLine}></View>
+        {emailView ? (
+        <EmailComponent closeEmailComponent={() => toggleEmailView(false)} />
+        ) : passwordView ? (
+        <PasswordComponent closePasswordComponent={() => togglePasswordView(false)} />
+        ) : (
+        <View style = {{ width:'100%' }}>
+         <View style={styles.informationContainer}>
+          <Text style={styles.informatonTxt}>Information</Text>
+          <View style={styles.drawLine}></View>
 
-            <View style={styles.emailContainer}>
-              <Text style={styles.emailTxt}>Email:</Text>
-              <View style={styles.drawBox}>
-                <Text>{userData?.email}</Text>
-              </View>
+          <View style={styles.emailContainer}>
+            <Text style={styles.emailTxt}>Email:</Text>
+            <View style={styles.drawBox}>
+              <Text>{userData?.email}</Text>
             </View>
-
-            <View style={styles.usernameContainer}>
+          </View>
+          <View style={styles.usernameContainer}>
               <Text style={styles.usernameTxt}>Username:</Text>
               <View style={styles.drawBox}>
                 <Text>{userData?.username}</Text>
@@ -190,13 +207,13 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.settingsBtns}>
+              <TouchableOpacity style={styles.settingsBtns} onPress={() => setEmailView(true)}>
                 <Text style={styles.settingsBtnsTxt}>
                   Change email
                 </Text>
               </TouchableOpacity >
 
-              <TouchableOpacity style={styles.settingsBtns}>
+              <TouchableOpacity style={styles.settingsBtns} onPress={() => setPasswordView(true)}>
                 <Text style={styles.settingsBtnsTxt}>
                   Change Password
                 </Text>
@@ -208,7 +225,6 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
                 </Text>
               </TouchableOpacity>
           </View>
-
           <View style={styles.homePageAndLogOutContainer}>
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={()=>{
                     setPage(<Home setPage={setPage} setPopUp={setPopUp}/>);
@@ -227,8 +243,9 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
                 Log Out
               </Text>
             </TouchableOpacity>
-
           </View>
+        </View>)}
+          
           
         </View>
       </Modal>

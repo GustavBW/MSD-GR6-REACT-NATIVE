@@ -7,8 +7,8 @@ import Home from "../pages/Home";
 import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated} from "react-native"
 import storage, { KnownKeys } from "../ts/storage";
 import { User } from "../ts/types";
-import {CheckBox} from '@react-native-community/checkbox';
-
+/* import {CheckBox} from '@react-native-community/checkbox';
+ */
 interface RegisterSecondProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
@@ -93,7 +93,7 @@ export default function RegisterSecond({
                 onChangeText={(text) => setAddress(text)}
               />
 
-              <CheckBox
+              {/* <CheckBox
                 value={false}
                 onValueChange={setNewsletterRecipient}
                 style={styles.checkbox}
@@ -104,12 +104,12 @@ export default function RegisterSecond({
                     value={consentsToToS}
                     onValueChange={setSelection}
                     style={styles.checkbox}
-              />
+              /> */}
               <Text>I've read and understood the ToS</Text>
   
               <TouchableOpacity style={styles.buttonVertical} onPress={()=>{
-                    setPage(<Scan setPage={setPage} setPopUp={setPopUp}/>)
-                }}>
+/*                     setPage(<Scan setPage={setPage} setPopUp={setPopUp}/>)
+ */                }}>
                 <Text style={styles.buttonText}>{'Scan license (optional)'}</Text>
               </TouchableOpacity>
 
