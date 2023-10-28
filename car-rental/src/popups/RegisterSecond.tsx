@@ -7,6 +7,7 @@ import Home from "../pages/Home";
 import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated} from "react-native"
 import storage, { KnownKeys } from "../ts/storage";
 import { User } from "../ts/types";
+import  CheckBox from 'expo-checkbox';
 /* import {CheckBox} from '@react-native-community/checkbox';
  */
 interface RegisterSecondProps {
@@ -33,7 +34,6 @@ export default function RegisterSecond({
     const [consentsToToS, setToSConsent] = useState(false);
     const [wantsNewsletter, setNewsletterRecipient] = useState(false);
     const translateY = useRef(new Animated.Value(0)).current;
-    const [isSelected, setSelection] = useState(false);
     const closeRegister = () => {
         Animated.timing(translateY, {
           toValue: 1000, 
@@ -89,24 +89,30 @@ export default function RegisterSecond({
               <TextInput
                 style={styles.input}
                 placeholder="Address (optional)"
-                secureTextEntry={true}
-                onChangeText={(text) => setAddress(text)}
+                onChangeText={setAddress}
               />
 
-              {/* <CheckBox
-                value={false}
-                onValueChange={setNewsletterRecipient}
-                style={styles.checkbox}
-              >
-                <Text>Do send me your newsletter</Text>
-              </CheckBox>
+            <View style={styles.conditions}>
               <CheckBox
-                    value={consentsToToS}
-                    onValueChange={setSelection}
-                    style={styles.checkbox}
-              /> */}
-              <Text>I've read and understood the ToS</Text>
-  
+                  style = {styles.CheckBox}
+                  value={wantsNewsletter}
+                  onValueChange={setNewsletterRecipient}
+              />
+              <Text style ={styles.CheckBoxText}>Do send me your newsletter</Text>
+            </View>
+
+            <View style={styles.conditions}>
+              <CheckBox
+                      style = {styles.CheckBox}
+                      value={consentsToToS}
+                      onValueChange={setToSConsent}
+                />
+                <Text style ={styles.CheckBoxText}>I've read and understood the ToS</Text>
+            </View>
+            
+            <View>
+              
+            </View>
               <TouchableOpacity style={styles.buttonVertical} onPress={()=>{
 /*                     setPage(<Scan setPage={setPage} setPopUp={setPopUp}/>)
  */                }}>
@@ -247,5 +253,23 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 15,
+    },
+    conditions: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '80%',
+      marginBottom: '5%'
+    },
+    CheckBox: {
+      borderRadius: 5,
+      marginLeft: '10%',
+      marginRight: '10%',
+      color: StylingDefaults.colors.greenBase.hsl
+    },
+    CheckBoxText: {
+      color: 'white',
+      fontSize: 15,
+
     }
   });
