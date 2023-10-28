@@ -19,7 +19,7 @@ export default function PaymentFirst({setPage, setPopUp, car}: PaymentProps): JS
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.pageTitle}>Payment First</Text>
+            <Text style={styles.pageTitle}>Reserve</Text>
             <Text style={styles.subTitle}>{car.manufacturer} {car.model} {car.year}</Text>
             <Text style={styles.header}>Information</Text>
             <View style={styles.vertSpacer}></View>
