@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import Scan from "../pages/Scan";
@@ -13,24 +13,33 @@ import  CheckBox from 'expo-checkbox';
 interface RegisterSecondProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
-    username: string,
-    password: string,
-    email: string,
+    usernameProp?: string,
+    emailProp?: string,
+    passwordProp?: string,
+    repeatPasswordProp?: string,
+    addressProp?: string,
+    tosProp?: boolean,
+    newsLetterProp?: boolean
+    
 }
 
 
 export default function RegisterSecond({
     setPage,
     setPopUp,
-    username,
-    password,
-    email
+    usernameProp = "",
+    emailProp  = "",
+    passwordProp = "",
+    repeatPasswordProp = "",
+    addressProp = "",
+    tosProp = false,
+    newsLetterProp = false,
 }: RegisterSecondProps
 
 
 ) : JSX.Element {
-    const [address, setAddress] = useState("none");
-    const [modalVisible, setModalVisible] = useState(true);
+  const [address, setAddress] = useState<string>("none");
+  const [modalVisible, setModalVisible] = useState(true);
     const [consentsToToS, setToSConsent] = useState(false);
     const [wantsNewsletter, setNewsletterRecipient] = useState(false);
     const translateY = useRef(new Animated.Value(0)).current;
@@ -45,14 +54,14 @@ export default function RegisterSecond({
         });
       };
     const saveRegisteredUser = async () => {
-      if(username && password){
+      if(usernameProp && passwordProp){
         try{
           const newUser: User = {
             id: Math.floor(Math.random() * 100000000),
             licenseId: Math.floor(Math.random() * 100000000),
-            username: username,
-            passwordHash: password,
-            email: email,
+            username: usernameProp,
+            passwordHash: passwordProp,
+            email: emailProp,
             consentsToToS: consentsToToS,
             recievesNewsletter: wantsNewsletter,
             homeAddr: address
@@ -65,6 +74,12 @@ export default function RegisterSecond({
         }
       }
     }
+
+    useEffect(() => {
+      setAddress(addressProp);
+      setNewsletterRecipient(newsLetterProp);
+      setToSConsent(tosProp);
+    },[addressProp,newsLetterProp,tosProp])
     
     return (
       
@@ -88,6 +103,7 @@ export default function RegisterSecond({
 
               <TextInput
                 style={styles.input}
+                value={address}
                 placeholder="Address (optional)"
                 onChangeText={setAddress}
               />
@@ -114,8 +130,8 @@ export default function RegisterSecond({
               
             </View>
               <TouchableOpacity style={styles.buttonVertical} onPress={()=>{
-/*                     setPage(<Scan setPage={setPage} setPopUp={setPopUp}/>)
- */                }}>
+                    setPage(<Scan setPage={setPage} setPopUp={setPopUp} scanFromRegistration={true} usernameProp={usernameProp} emailProp={emailProp} passwordProp={passwordProp} repeatPasswordProp={repeatPasswordProp} addressProp={address} newsLetterProp={wantsNewsletter} tosProp={consentsToToS}/>)
+                }}>
                 <Text style={styles.buttonText}>{'Scan license (optional)'}</Text>
               </TouchableOpacity>
 
@@ -123,7 +139,7 @@ export default function RegisterSecond({
                 <TouchableOpacity
                   style={styles.buttonHorizontal}
                   onPress={() => {
-                    setPopUp(<RegisterFirst setPage={setPage} setPopUp={setPopUp} />);
+                    setPopUp(<RegisterFirst setPage={setPage} setPopUp={setPopUp} usernameProp={usernameProp} emailProp={emailProp} passwordProp={passwordProp} repeatPasswordProp={repeatPasswordProp} addressProp={address} newsLetterProp={wantsNewsletter} tosProp={consentsToToS} />);
                   }}
                 >
                   <Text style={styles.buttonText}>Back</Text>
@@ -132,8 +148,14 @@ export default function RegisterSecond({
                 <TouchableOpacity
                   style={styles.buttonHorizontal}
                   onPress={() => {
-                    saveRegisteredUser();
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp}/>);
+                    if(consentsToToS){
+                      saveRegisteredUser().then(() =>{
+                        setPage(<Home setPage={setPage} setPopUp={setPopUp}/>);
+                      }
+                      )
+
+                    }
+                    
                   }}
                 >
                   <Text style={styles.buttonText}>Confirm</Text>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import RegisterSecond from "./RegisterSecond";
@@ -7,21 +7,34 @@ import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Butto
 interface RegisterFirstProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
+    usernameProp?: string,
+    emailProp?: string,
+    passwordProp?: string,
+    repeatPasswordProp?: string
+    addressProp?: string,
+    tosProp?: boolean,
+    newsLetterProp?: boolean
 }
-
-
 
 
 export default function RegisterFirst({
     setPage,
     setPopUp,
+    usernameProp = "",
+    emailProp = "",
+    passwordProp = "",
+    repeatPasswordProp = "",
+    addressProp,
+    tosProp,
+    newsLetterProp
+    
 }: RegisterFirstProps
 
 ) : JSX.Element {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const [retypedPassword, setRetypedPassword] = useState("");
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [repeatPassword, setRepeatPassword] = useState<string>("");
     const [modalVisible, setModalVisible] = useState(true);
     const translateY = useRef(new Animated.Value(0)).current;
     const closeRegister = () => {
@@ -34,7 +47,12 @@ export default function RegisterFirst({
           setPopUp(<></>);
         });
       };
-    
+    useEffect(() => {
+      setUsername(usernameProp);
+      setEmail(emailProp);
+      setPassword(passwordProp);
+      setRepeatPassword(repeatPasswordProp);
+    }, [usernameProp, emailProp, passwordProp, repeatPasswordProp]);
 
     
     return (
@@ -61,29 +79,33 @@ export default function RegisterFirst({
               <TextInput
                 style={styles.input}
                 placeholder="Username"
+                value={username}
                 onChangeText={(text) => setUsername(text)}
               />
               <TextInput
                 style={styles.input}                
                 placeholder="email"
+                value={email}
                 onChangeText={(text) => setEmail(text)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Password"
+                value={password}
                 secureTextEntry={true}
                 onChangeText={(text) => setPassword(text)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Repeat Password"
+                value={repeatPassword}
                 secureTextEntry={true}
-                onChangeText={(text) => setRetypedPassword(text)}
+                onChangeText={(text) => setRepeatPassword(text)}
               />
   
               <TouchableOpacity style={styles.button} onPress={()=>{
-                    if (username && password) {
-                      setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp} username={username} password={password} email={email}/>)
+                    if (username && email && password && password == repeatPassword ) {
+                      setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp} usernameProp={username} emailProp={email} passwordProp={password} repeatPasswordProp={repeatPassword} addressProp={addressProp} newsLetterProp={newsLetterProp} tosProp={tosProp}/>)
                     }  
                 }}>
                 <Text style={styles.buttonText}>Register</Text>

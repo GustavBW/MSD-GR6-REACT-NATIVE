@@ -28,10 +28,6 @@ export default function Home({setPage, setPopUp, selectedCar}: HomeProps): JSX.E
             const fromStorage = await storage.load<string>({key: KnownKeys.carData});
             const fullParsed = await JSON.parse(fromStorage);
             setCars(fullParsed)
-            try{
-                console.log(isLoggedIn);
-                
-            }catch(ignored){}
         }
         loadCars()
     }, [])

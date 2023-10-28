@@ -6,13 +6,34 @@ import License from './License';
 import storage,{KnownKeys} from '../../src/ts/storage'
 import * as MediaLibrary from 'expo-media-library';
 import { CarData } from '../ts/types';
+import RegisterSecond from '../popups/RegisterSecond';
+import Home from './Home';
 
 interface ScanProps {
   setPage: (view: JSX.Element) => void;
   setPopUp: (view: JSX.Element) => void;
+  scanFromRegistration?: boolean,
+  usernameProp?: string,
+  emailProp?: string,
+  passwordProp?: string,
+  repeatPasswordProp?: string,
+  addressProp?: string,
+  tosProp?: boolean,
+  newsLetterProp?: boolean
 }
 
-export default function Scan({ setPage, setPopUp }: ScanProps): JSX.Element {
+export default function Scan({ 
+   setPage,
+   setPopUp,
+   scanFromRegistration = false,
+   usernameProp = "",
+    emailProp  = "",
+    passwordProp = "",
+    repeatPasswordProp = "",
+    addressProp = "",
+    tosProp = false,
+    newsLetterProp = false,
+  }: ScanProps): JSX.Element {
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState<boolean | null>(null);
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -91,7 +112,13 @@ const cameraRef = useRef<Camera | null>(null);
             <Button title="Scan Again" onPress={resetPreview} />
             <Button title="Save" onPress= {() =>{
               saveImage().then(() => {
-                  setPage(<License setPage={setPage} setPopUp={setPopUp}/>);
+                  if(scanFromRegistration){
+                    setPage(<Home setPage={setPage} setPopUp={setPopUp} />)
+                    setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp} usernameProp={usernameProp} emailProp={emailProp} passwordProp={passwordProp} repeatPasswordProp={repeatPasswordProp} addressProp={addressProp} newsLetterProp={newsLetterProp} tosProp={tosProp}  />)
+                  }
+                  else{
+                    setPage(<License setPage={setPage} setPopUp={setPopUp}/>);
+                  }
               });
             }} />
           </View>
