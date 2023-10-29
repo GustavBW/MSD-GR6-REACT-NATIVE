@@ -17,3 +17,11 @@ export const StylingDefaults = {
         title: 50,
     }
 }
+
+// Refacotred styles and colors (29/10/2023):
+export const RefactoredColors = {
+    
+}
+export const RefactoredStyles = {
+
+}
