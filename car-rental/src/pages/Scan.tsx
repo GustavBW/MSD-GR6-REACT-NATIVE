@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, TouchableOpacity, Image, Button, SafeAreaView } from 'react-native';
+import { Text, View, Image, Button } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
-import * as FileSystem from 'expo-file-system';
 import License from './License';
 import storage,{KnownKeys} from '../../src/ts/storage'
 import * as MediaLibrary from 'expo-media-library';
@@ -91,16 +90,13 @@ const cameraRef = useRef<Camera | null>(null);
           await MediaLibrary.addAssetsToAlbumAsync([asset], album);
           console.log('Photo added to album!');
         } else {
-          // If the album doesn't exist, you can create it
           const newAlbum = await MediaLibrary.createAlbumAsync('driverLicense', asset, false);
         }
         console.log('Photo saved to album!');
         console.log('Photo: ', asset);
   
-        // Save the image data with the key
         storage.save({ key: KnownKeys.licenseImage, data: asset });
   
-        // Load the saved image data and log it
         const loadedImage = await storage.load<MediaLibrary.Asset>({ key: KnownKeys.licenseImage });
         console.log('Loaded Image: ', loadedImage);
   
