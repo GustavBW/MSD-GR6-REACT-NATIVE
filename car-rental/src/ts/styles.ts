@@ -15,5 +15,7 @@ export const StylingDefaults = {
     backgroundGradient: [Colors.blueBase.hsl, Colors.greenBase.hsl],
     fontSize: {
         title: 50,
+        subTitle: 30,
+        header: 20,
     }
 }

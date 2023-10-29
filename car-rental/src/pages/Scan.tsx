@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, TouchableOpacity, Image, Button } from 'react-native';
+import { Text, View, TouchableOpacity, Image, Button, SafeAreaView } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
 import License from './License';
