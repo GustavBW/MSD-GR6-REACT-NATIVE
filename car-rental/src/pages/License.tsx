@@ -282,7 +282,9 @@ const togglePasswordView = (show: boolean) => {
           </View>
           <View style={styles.homePageAndLogOutContainer}>
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={()=>{
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp}/>);
+                    saveLicenseDate().then(() => {
+                      setPage(<Home setPage={setPage} setPopUp={setPopUp}/>);
+                    })
                 }}>
               <Text style={styles.homePageAndLogOutBtnsTxt}>
                 Home
@@ -291,6 +293,7 @@ const togglePasswordView = (show: boolean) => {
 
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={() =>{
                     saveLicenseDate().then(() => {
+                      storage.save({key: KnownKeys.isLoggedIn, data: "false"})
                       setPage(<Home setPage={setPage} setPopUp={setPopUp} />);
                     })
                     
