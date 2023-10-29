@@ -31,7 +31,7 @@ export default function PaymentFirst({setPage, setPopUp, car}: PaymentProps): JS
                     onChangeText={(text) => setEmail(text)}
                 />
                 <TouchableOpacity style={styles.button} onPress={() => {
-                    setPage(<Scan setPage={setPage} setPopUp={setPopUp}/>)
+                    setPage(<Scan setPage={setPage} setPopUp={setPopUp} scanFromPayment={true} car={car}/>)
                 }}>
                     <Text style={styles.buttonText}>Scan</Text>
                 </TouchableOpacity>

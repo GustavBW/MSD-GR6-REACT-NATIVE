@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     },
     button: {
         margin: 'auto',
+        marginRight: '10%',
             width: 100,
             height: 40,
             backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,

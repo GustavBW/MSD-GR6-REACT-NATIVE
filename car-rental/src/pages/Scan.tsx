@@ -8,11 +8,14 @@ import * as MediaLibrary from 'expo-media-library';
 import { CarData } from '../ts/types';
 import RegisterSecond from '../popups/RegisterSecond';
 import Home from './Home';
+import PaymentFirst from './PaymentFirst';
 
 interface ScanProps {
   setPage: (view: JSX.Element) => void;
   setPopUp: (view: JSX.Element) => void;
   scanFromRegistration?: boolean,
+  scanFromPayment?: boolean,
+  car?: CarData,
   usernameProp?: string,
   emailProp?: string,
   passwordProp?: string,
@@ -26,6 +29,19 @@ export default function Scan({
    setPage,
    setPopUp,
    scanFromRegistration = false,
+   scanFromPayment = false,
+   car = {
+     model: '',
+     manufacturer: '',
+     year: 0,
+     weightKg: 0,
+     dkkPrKm: 0,
+     dimensions: [],
+     lat: 0,
+     lon: 0,
+     available: false,
+     id: 0
+   } ,
    usernameProp = "",
     emailProp  = "",
     passwordProp = "",
@@ -115,6 +131,9 @@ const cameraRef = useRef<Camera | null>(null);
                   if(scanFromRegistration){
                     setPage(<Home setPage={setPage} setPopUp={setPopUp} />)
                     setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp} usernameProp={usernameProp} emailProp={emailProp} passwordProp={passwordProp} repeatPasswordProp={repeatPasswordProp} addressProp={addressProp} newsLetterProp={newsLetterProp} tosProp={tosProp}  />)
+                  }
+                  else if(scanFromPayment){
+                    setPage(<PaymentFirst setPage={setPage} setPopUp={setPopUp} car={car}/>)
                   }
                   else{
                     setPage(<License setPage={setPage} setPopUp={setPopUp}/>);
