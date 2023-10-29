@@ -1,14 +1,16 @@
-import React, { useMemo, useState } from 'react';
-import { Image, StyleSheet, View,TouchableOpacity, TextInput, Text, Modal, Button, Animated, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { Image, StyleSheet, View,TouchableOpacity, TextInput, Text, Modal, Animated, ScrollView } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
 import { SafeAreaView } from "react-native-safe-area-context";
 import Home from './Home';
 import Scan from './Scan';
-import { CarData, LicenseLocal, User } from '../ts/types';
+import { LicenseLocal, User } from '../ts/types';
 import storage, { KnownKeys } from "../ts/storage";
 import * as MediaLibrary from 'expo-media-library';
 import EmailComponent from '../components/EmailComponent';
 import PasswordComponent from '../components/PasswordComponent';
+import DateTimePicker from "@react-native-community/datetimepicker"
+
 
 export interface LicenseProps {
     setPage: (view: JSX.Element) => void;
@@ -19,17 +21,17 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
 
   const defaultLicense = require('./drivers-license-default.png');
 
-  const [expirationDate, setExpirationDate] = useState<string>('');
-  const [creationDate, setCreationDate] = useState<string>('');
-  const [surname, setSurname] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [nationality, setNationality] = useState<string>('');
-  const [cpr, setCpr] = useState<string>('');
-  const [id, setId] = useState<string>('');
+  const [expirationDate, setExpirationDate] = useState<Date | undefined>(new Date());
+  const [showExpirationDatePicker, setShowExpirationDatePicker] = useState(false);
+  const [creationDate, setCreationDate] = useState<Date |undefined>(new Date());
+  const [showCreationDatePicker, setShowCreationDatePicker] = useState(false);
+  const [surname, setSurname] = useState<string |undefined>('');
+  const [name, setName] = useState<string |undefined>('');
+  const [nationality, setNationality] = useState<string |undefined>('');
+  const [cpr, setCpr] = useState<string |undefined>('');
+  const [id, setId] = useState<string |undefined>('');
   const [isModalVisible, setIsModalVisible] = useState(true);
   const translateY = useState(new Animated.Value(0))[0];
-  const [email, setEmail] = useState<string|null>('');
-  const [password, setPassword] = useState<string|null>('');
   const [emailView, setEmailView] = useState(false);
   const [passwordView, setPasswordView] = useState(false);
   const [licenseData, setLicenseData] = useState<LicenseLocal | undefined>();
@@ -40,7 +42,17 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
   React.useEffect(() => {
     const loadLicenseData = async () => {
       try {
-        setLicenseData(await storage.load<LicenseLocal>({ key: KnownKeys.licenseData }));
+        const loadedLicenseData = await storage.load<LicenseLocal>({ key: KnownKeys.licenseData });
+        setLicenseData(loadedLicenseData);
+        setExpirationDate(loadedLicenseData?.expirationDate);
+        console.log(loadedLicenseData.expirationDate)
+        setCreationDate(loadedLicenseData?.creationDate);
+        console.log(loadedLicenseData.creationDate)
+        setSurname(loadedLicenseData?.surname);
+        setName(loadedLicenseData?.name);
+        setNationality(loadedLicenseData?.nationality);
+        setCpr(loadedLicenseData?.socialSecurityNumber);
+        setId(loadedLicenseData?.licenseId);
         const loadedImage = await storage.load<MediaLibrary.Asset>({ key: KnownKeys.licenseImage });
         setLicenseImage(loadedImage);
       } catch (error) {
@@ -56,16 +68,18 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
       console.error('user not found')
     }
   }
-  loadUserData();
-  const closeLicense = () => {
+  React.useEffect(() => {
+    loadUserData();
+  }, []);
+  const closeLicense = async () => {
     storage.save({key: KnownKeys.licenseData, data: {
       expirationDate: expirationDate,
       creationDate: creationDate,
       surname: surname,
       name: name,
       nationality: nationality,
-      cpr: cpr,
-      id: id,
+      socialSecurityNumber: cpr,
+      licenseId: id,
       userId: userData?.id,
       pictureUrl: licenseImage?.uri
     }})
@@ -97,6 +111,35 @@ const togglePasswordView = (show: boolean) => {
   loadUserData();
 };
 
+const getExpirationValue:any = () => {
+  try {
+    if (expirationDate && expirationDate.toString() !== undefined) {
+      return expirationDate;
+    } else {
+      return new Date();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getCreationValue: any = () => {
+  try {
+    if (creationDate && creationDate.toString() !== undefined) {
+      return creationDate;
+    } else {
+      return new Date();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const expirationValue = getExpirationValue()?.toString().substring(0, 10);
+const creationValue =  getCreationValue()?.toString().substring(0, 10);
+
+
+
 
 
 
@@ -112,46 +155,86 @@ const togglePasswordView = (show: boolean) => {
                 <Text style={styles.closeBtnText}>X</Text>
         </TouchableOpacity> 
 
-        <TextInput
-          style={styles.input}
-          placeholder="Expiration Date"
-          onChangeText={(text) => setExpirationDate(text)}
-        />
+        <TouchableOpacity onPress={() => setShowExpirationDatePicker(true)}>
+          <TextInput
+            style={styles.input}
+            value={expirationValue}
+            placeholder="Expiration Date"
+            editable={false}
+          />
+        </TouchableOpacity>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Creation Date"
-          onChangeText={(text) => setCreationDate(text)}
-        />
+        <TouchableOpacity onPress={() => setShowCreationDatePicker(true)}>
+          <TextInput
+            style={styles.input}
+            value={creationValue}
+            placeholder="Creation Date"
+            editable={false}
+          />
+        </TouchableOpacity>
 
+        {showExpirationDatePicker && (
+          <DateTimePicker
+            value={new Date(expirationValue)}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={(event, selectedDate) => {
+              setShowExpirationDatePicker(false);
+              if (selectedDate) {
+                setExpirationDate(selectedDate);
+              }
+            }}
+          />
+        )}
+
+        {showCreationDatePicker && (
+          <DateTimePicker
+            value={creationValue}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={(event, selectedDate) => {
+              setShowCreationDatePicker(false);
+              if (selectedDate) {
+                setCreationDate(selectedDate);
+              }
+            }}
+          />
+        )}
         <TextInput
           style={styles.input}
+          value={surname}
           placeholder="Surname"
-          onChangeText={(text) => setSurname(text)}
+          onChangeText={setSurname}
         />
 
         <TextInput
           style={styles.input}
+          value={name}
           placeholder="Name"
-          onChangeText={(text) => setName(text)}
+          onChangeText={setName}
         />
 
         <TextInput
           style={styles.input}
+          value={nationality}
           placeholder="Nationality"
-          onChangeText={(text) => setNationality(text)}
+          onChangeText={setNationality}
         />
         
         <TextInput
           style={styles.input}
+          value={cpr}
           placeholder="CPR"
-          onChangeText={(text) => setCpr(text)}
+          onChangeText={setCpr}
         />
 
         <TextInput
           style={styles.input}
+          value={id}
           placeholder="ID"
-          onChangeText={(text) => setId(text)}
+          onChangeText={setId}
         />
       </ScrollView>
       <Modal
