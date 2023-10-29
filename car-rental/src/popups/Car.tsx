@@ -8,6 +8,9 @@ import { StylingDefaults } from '../ts/styles';
 import Confirmation from '../popups/Confirmation';
 import { Menu } from './Menu';
 import Home from '../pages/Home';
+import storage, {KnownKeys} from '../ts/storage';
+import PaymentSecond from '../pages/PaymentSecond';
+import PaymentFirst from '../pages/PaymentFirst';
 
 export interface CarProps {
     setPage: (view: JSX.Element) => void;
@@ -16,6 +19,9 @@ export interface CarProps {
 }
 
 export default function Car({setPage, setPopUp, car}: CarProps): JSX.Element {
+    const [isLoggedIn, setLoggedIn] = React.useState("false");
+
+
     return (
         <View>
             <Modal animationType="slide"  transparent={true}>
@@ -45,7 +51,11 @@ export default function Car({setPage, setPopUp, car}: CarProps): JSX.Element {
                         <Text style={styles.modalText}>Map</Text>
                     </TouchableOpacity>                    
                     <TouchableOpacity style={styles.button} onPress={() => {
-                        setPopUp(<Confirmation setPopUp={setPopUp} setPage={setPage} car={car}/>)
+                        if(isLoggedIn == "true"){
+                            setPage(<PaymentSecond setPage={setPage} setPopUp={setPopUp} car={car}/>)
+                            return;
+                        }
+                        setPage(<PaymentFirst setPage={setPage} setPopUp={setPopUp} car={car} />)
                     }}>
                         <Text style={styles.modalText}>Reserve</Text>
                     </TouchableOpacity>                

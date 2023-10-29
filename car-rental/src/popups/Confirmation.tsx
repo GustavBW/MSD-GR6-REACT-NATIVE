@@ -3,6 +3,7 @@ import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, Text, View,
 import { LinearGradient } from 'expo-linear-gradient';
 import { StylingDefaults } from '../ts/styles';
 import { CarData } from '../ts/types';
+import Home from '../pages/Home';
 
 
 export interface ConfirmationProps {
@@ -25,7 +26,10 @@ export default function Confirmation({setPage, setPopUp, car}: ConfirmationProps
                         {/* Confirmation */}
                         <Text style={styles.modalHeader}>Purchase Complete!</Text>
 
-                        <TouchableOpacity style={styles.button}>
+                        <TouchableOpacity style={styles.button} onPress={() => {
+                            setPopUp(<></>);
+                            setPage(<Home setPage={setPage} setPopUp={setPopUp} selectedCar={car} />);
+                        }}>
                             <Text style={styles.modalText}>To Car</Text>
                         </TouchableOpacity>  
                     </View>
