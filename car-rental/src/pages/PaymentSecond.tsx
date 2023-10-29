@@ -54,13 +54,13 @@ export default function PaymentSecond({setPage, setPopUp, car, email}: PaymentPr
                         setPage(<Home setPopUp={setPopUp} setPage={setPage} selectedCar={car}/>)
                         setPopUp(<Car car={car} setPage={setPage} setPopUp={setPopUp}/>)
                     }}>
-                        <Text>Cancel</Text>
+                        <Text style={styles.buttonText}>Cancel</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={() => {
                         setPage(<Home setPopUp={setPopUp} setPage={setPage} selectedCar={car}/>)
                         setPopUp(<Confirmation setPage={setPage} setPopUp={setPopUp} car={car}/>)
                     }}>
-                        <Text>Confirm</Text>
+                        <Text style={styles.buttonText}>Confirm</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     
     },
     header: {
-        fontSize: RefactoredStyles.fontSize.title,
+        fontSize: RefactoredStyles.fontSize.subtitle,
         padding: 10,
         color: RefactoredStyles.colors.white,
         textAlign: "left",
@@ -144,6 +144,10 @@ const styles = StyleSheet.create({
         borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius,
         bottom: 0,
     },
-    
+    buttonText: {
+        color: RefactoredStyles.colors.white,
+        fontWeight: RefactoredStyles.fontWeight.buttonText,
+        fontSize: RefactoredStyles.fontSize.buttonText,
+    }
 
 })

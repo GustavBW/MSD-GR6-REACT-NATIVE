@@ -33,7 +33,7 @@ export default function PaymentFirst({setPage, setPopUp, car}: PaymentProps): JS
                 <TouchableOpacity style={styles.button} onPress={() => {
                     setPage(<Scan setPage={setPage} setPopUp={setPopUp}/>)
                 }}>
-                    <Text>Scan</Text>
+                    <Text style={styles.buttonText}>Scan</Text>
                 </TouchableOpacity>
 
                 <View style={styles.horizontalNav} >
@@ -41,12 +41,12 @@ export default function PaymentFirst({setPage, setPopUp, car}: PaymentProps): JS
                         setPage(<Home setPopUp={setPopUp} setPage={setPage} selectedCar={car}/>)
                         setPopUp(<Car car={car} setPage={setPage} setPopUp={setPopUp}/>)
                     }}>
-                        <Text>Cancel</Text>
+                        <Text style={styles.buttonText}>Cancel</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={() => {
                         setPage(<PaymentSecond setPopUp={setPopUp} setPage={setPage} car={car} email={email}/>)
                     }}>
-                        <Text>Next</Text>
+                        <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -78,11 +78,12 @@ const styles = StyleSheet.create({
     
     },
     header: {
-        fontSize: RefactoredStyles.fontSize.title,
+        fontSize: RefactoredStyles.fontSize.subtitle,
         padding: 10,
         color: RefactoredStyles.colors.white,
         textAlign: "left",
         width: "100%",
+        fontWeight: RefactoredStyles.fontWeight.subtitle,
     },
     vertSpacer: {
         height: 1,
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 10,
         backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
+        color: RefactoredStyles.colors.white,
     },
     input: {
         width: "100%",
@@ -106,8 +108,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         margin: 10,
+        textAlign: "center",
         backgroundColor: RefactoredStyles.colors.white,
-        textAlign: "center"
     },
     button: {
         margin: 5,
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
         backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,
         padding: 8,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     horizontalNav: {
         flex: 1,
@@ -130,6 +132,11 @@ const styles = StyleSheet.create({
         borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius,
         bottom: 0,
     },
+    buttonText: {
+        color: RefactoredStyles.colors.white,
+        fontWeight: RefactoredStyles.fontWeight.buttonText,
+        fontSize: RefactoredStyles.fontSize.buttonText,
+    }
     
 
 })
