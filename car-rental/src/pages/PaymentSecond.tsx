@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, Text, View, Keyboard, TouchableOpacity, TextInput } from 'react-native';
+import React, { useEffect, Component } from 'react';
+import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, Text, View, Keyboard, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { CarData } from '../ts/types';
 import Home from './Home';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -8,6 +8,12 @@ import { faPaypal } from "@fortawesome/free-brands-svg-icons"
 import Car from '../popups/Car';
 import { StylingDefaults } from '../ts/styles';
 import Confirmation from '../popups/Confirmation';
+import { CreditCardInput, LiteCreditCardInput } from "react-native-credit-card-input";
+
+const handlePayment = (formData) => {
+    console.log(formData);
+  };
+
 
 export interface PaymentProps {
     setPage: (view: JSX.Element) => void;
@@ -16,10 +22,13 @@ export interface PaymentProps {
     email?: string;
 }
 
+
+
 export default function PaymentSecond({setPage, setPopUp, car, email}: PaymentProps): JSX.Element {
     const [destination, setDestination] = React.useState("destination");
     return (
         <SafeAreaView style={styles.container}>
+          <ScrollView>
             <Text style={styles.pageTitle}>Reserve</Text>
             <Text style={styles.subTitle}>{car.manufacturer} {car.model} {car.year}</Text>
             <View style={styles.body}>
@@ -31,19 +40,21 @@ export default function PaymentSecond({setPage, setPopUp, car, email}: PaymentPr
                         secureTextEntry={true}
                         onChangeText={(text) => setDestination(text)}
                     />
-                <Text style={styles.header}>Payment Method</Text>
+                <Text style={styles.header}>Card Payment</Text>
                 <View style={styles.vertSpacer}></View>
-                <View style={{
-                    width: "100%",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-evenly",
-                    padding: 10
-                }}>
-                    <FontAwesomeIcon icon={faPaypal} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
-                    <FontAwesomeIcon icon={faCreditCard} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
-                    <FontAwesomeIcon icon={faUser} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
-                </View>
+                <View style={styles.cardContainer}>
+                                                              <CreditCardInput
+                                                                //autoFocus
+                                                                requiresCVC
+                                                                labelStyle={styles.labelcard}
+                                                                inputStyle={styles.inputcard}
+                                                                validColor="black"
+                                                                invalidColor="red"
+                                                                placeholderColor="white"
+                                                                allowScroll
+                                                                onChange={handlePayment}
+                                                              />
+                                                            </View>
 
                 <Text style={styles.header}>Total</Text>
                 <View style={styles.vertSpacer}></View>
@@ -64,6 +75,7 @@ export default function PaymentSecond({setPage, setPopUp, car, email}: PaymentPr
                     </TouchableOpacity>
                 </View>
             </View>
+           </ScrollView>
         </SafeAreaView>
     )
 }
@@ -142,8 +154,24 @@ const styles = StyleSheet.create({
         height: "10%",
         backgroundColor: "transparent",
         borderRadius: 10,
-        bottom: 0,
+        marginTop: 20,
+        bottom: 30,
+        paddingTop: 20,
+        paddingBottom: 10,
     },
-    
-
+    cardContainer: {
+        backgroundColor: StylingDefaults.colors.blueDark.hsl,
+        marginTop: 30,
+        height: '40%',
+        width: '80%',
+        paddingBottom: 15,
+      },
+      labelcard: {
+        color: "white",
+        fontSize: 12,
+      },
+      inputcard: {
+        fontSize: 16,
+        color: "white",
+      },
 })
