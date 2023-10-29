@@ -114,7 +114,9 @@ export default function RegisterSecond({
                   value={wantsNewsletter}
                   onValueChange={setNewsletterRecipient}
               />
-              <Text style ={styles.CheckBoxText}>Do send me your newsletter</Text>
+              <View style={styles.checkBoxTextBox}>
+                <Text style ={styles.CheckBoxText}>Do send me your newsletter</Text>
+              </View>
             </View>
 
             <View style={styles.conditions}>
@@ -123,7 +125,9 @@ export default function RegisterSecond({
                       value={consentsToToS}
                       onValueChange={setToSConsent}
                 />
+              <View style={styles.checkBoxTextBox}>
                 <Text style ={styles.CheckBoxText}>I've read and understood the ToS</Text>
+              </View>
             </View>
             
             <View>
@@ -291,7 +295,13 @@ const styles = StyleSheet.create({
     },
     CheckBoxText: {
       color: 'white',
-      fontSize: 15,
+        fontWeight: 'bold',
+        fontSize: 12,
 
+    },
+    checkBoxTextBox: {
+      backgroundColor: 'rgb(70,88,129)',
+      padding: 10, // Padding around the text
+      borderRadius: 5, // Border radius for rounded corners
     }
   });
