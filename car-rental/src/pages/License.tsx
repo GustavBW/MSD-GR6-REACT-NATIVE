@@ -43,11 +43,10 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
     const loadLicenseData = async () => {
       try {
         const loadedLicenseData = await storage.load<LicenseLocal>({ key: KnownKeys.licenseData });
+        console.log("loaded date are \n" + JSON.stringify(loadedLicenseData, null, 2));
         setLicenseData(loadedLicenseData);
         setExpirationDate(loadedLicenseData?.expirationDate);
-        console.log(loadedLicenseData.expirationDate)
         setCreationDate(loadedLicenseData?.creationDate);
-        console.log(loadedLicenseData.creationDate)
         setSurname(loadedLicenseData?.surname);
         setName(loadedLicenseData?.name);
         setNationality(loadedLicenseData?.nationality);
@@ -72,6 +71,16 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
     loadUserData();
   }, []);
   const closeLicense = async () => {
+    Animated.timing(translateY, {
+      toValue: 1000, 
+      duration: 100,
+      useNativeDriver: true,
+    }).start(() => {
+      setIsModalVisible(false);
+    });
+  }
+
+  const saveLicenseDate = async () => {
     storage.save({key: KnownKeys.licenseData, data: {
       expirationDate: expirationDate,
       creationDate: creationDate,
@@ -83,13 +92,8 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
       userId: userData?.id,
       pictureUrl: licenseImage?.uri
     }})
-    Animated.timing(translateY, {
-      toValue: 1000, 
-      duration: 100,
-      useNativeDriver: true,
-    }).start(() => {
-      setIsModalVisible(false);
-    });
+    const loadedLicenseData = await storage.load<LicenseLocal>({ key: KnownKeys.licenseData });
+    console.log("saved date are \n" + JSON.stringify(loadedLicenseData, null, 2));
   }
 
   const openLicense = () => {
@@ -137,7 +141,8 @@ const getCreationValue: any = () => {
 
 const expirationValue = getExpirationValue()?.toString().substring(0, 10);
 const creationValue =  getCreationValue()?.toString().substring(0, 10);
-
+/* const expirationValueInDateFormat: Date = new Date(Date.parse(expirationValue));
+ */
 
 
 
@@ -158,7 +163,7 @@ const creationValue =  getCreationValue()?.toString().substring(0, 10);
         <TouchableOpacity onPress={() => setShowExpirationDatePicker(true)}>
           <TextInput
             style={styles.input}
-            value={expirationValue}
+            value={expirationDate?.toString()}
             placeholder="Expiration Date"
             editable={false}
           />
@@ -167,7 +172,7 @@ const creationValue =  getCreationValue()?.toString().substring(0, 10);
         <TouchableOpacity onPress={() => setShowCreationDatePicker(true)}>
           <TextInput
             style={styles.input}
-            value={creationValue}
+            value={creationDate?.toString()}
             placeholder="Creation Date"
             editable={false}
           />
@@ -175,7 +180,7 @@ const creationValue =  getCreationValue()?.toString().substring(0, 10);
 
         {showExpirationDatePicker && (
           <DateTimePicker
-            value={new Date(expirationValue)}
+            value={new Date()}
             mode="date"
             is24Hour={true}
             display="default"
@@ -190,7 +195,7 @@ const creationValue =  getCreationValue()?.toString().substring(0, 10);
 
         {showCreationDatePicker && (
           <DateTimePicker
-            value={creationValue}
+            value={new Date()}
             mode="date"
             is24Hour={true}
             display="default"
@@ -318,8 +323,9 @@ const creationValue =  getCreationValue()?.toString().substring(0, 10);
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={() =>{
-                    storage.save({key: KnownKeys.isLoggedIn, data: "false"})
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp} />);
+                    saveLicenseDate().then(() => {
+                      setPage(<Home setPage={setPage} setPopUp={setPopUp} />);
+                    })
                     
                   }}>
               <Text style={styles.homePageAndLogOutBtnsTxt}>
