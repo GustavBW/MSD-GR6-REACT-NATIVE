@@ -115,39 +115,6 @@ const togglePasswordView = (show: boolean) => {
   loadUserData();
 };
 
-const getExpirationValue:any = () => {
-  try {
-    if (expirationDate && expirationDate.toString() !== undefined) {
-      return expirationDate;
-    } else {
-      return new Date();
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getCreationValue: any = () => {
-  try {
-    if (creationDate && creationDate.toString() !== undefined) {
-      return creationDate;
-    } else {
-      return new Date();
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const expirationValue = getExpirationValue()?.toString().substring(0, 10);
-const creationValue =  getCreationValue()?.toString().substring(0, 10);
-/* const expirationValueInDateFormat: Date = new Date(Date.parse(expirationValue));
- */
-
-
-
-
-
   return (
     <SafeAreaView style={styles.LicenseContainer} >
       <Image
