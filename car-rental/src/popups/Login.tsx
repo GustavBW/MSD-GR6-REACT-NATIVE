@@ -1,30 +1,32 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated } from "react-native"
-import { StylingDefaults } from '../ts/styles';
+import { RefactoredStyles, StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import RegisterFirst from "./RegisterFirst";
 import License from "../pages/License";
+import storage, { KnownKeys } from "../ts/storage";
+import { User } from "../ts/types";
 /* import ProfilePopUp from "./Profile";
  */
 interface LoginProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
-    imagePath?: string;
-    username?: string;
-    password?: string;
+
 }
 
 export default function Login({
     setPage,
     setPopUp,
-    imagePath,
+    
 }: LoginProps
 ) : JSX.Element {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [token, setToken] = useState("");
     const [inputsAreValid, setInputsAreValid] = useState(false);
     const [modalVisible, setModalVisible] = useState(true);
+    const [userData, setUserData] = useState<User | undefined>()
     const translateY = useRef(new Animated.Value(0)).current;
     const closeLogin = () => {
         Animated.timing(translateY, {
@@ -36,14 +38,18 @@ export default function Login({
           setPopUp(<></>);
         });
       };
-    const checkInputs = () => {
-        if(username.length > 0 && password.length > 0){
-            setInputsAreValid(true);
-        }else{
-            setInputsAreValid(false);
-        }
-        return inputsAreValid;
+      
+    useEffect( () => {
+      const loadUserData = async () => {
+        try{
+          setUserData(await storage.load<User | undefined>({ key: KnownKeys.userData }))
+        }catch(ignored){}
+      }
+      loadUserData();
     }
+
+    )
+    
       return (
         <View style={styles.container}>
           <Modal animationType="slide" transparent={true} visible={modalVisible}>
@@ -56,7 +62,7 @@ export default function Login({
               ]}
             >
               <LinearGradient
-                colors={StylingDefaults.colors.BlueAndGreen}
+                colors={RefactoredStyles.subGradient}
                 style={styles.linearGradient}
               >
                 <View style={styles.popUpHeader}>
@@ -79,15 +85,10 @@ export default function Login({
                   onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity style={styles.button} onPress={()=>{
-                    checkInputs(); // Call the checkInputs function to update inputsAreValid
-                    if (inputsAreValid === true) {
-                      setPage(
-                        <License
-                        setPage={setPage}
-                        setPopUp={setPopUp}
-                      />
-                      );
-                    }
+                  if(userData && username == userData.username && password == userData.passwordHash){
+                    storage.save({key: KnownKeys.isLoggedIn, data: "true"});
+                    setPage( <License setPage={setPage} setPopUp={setPopUp} /> );
+                  }
                  }
                 }>
                   <Text style={styles.buttonText}>Login</Text>
@@ -116,14 +117,14 @@ export default function Login({
             alignItems: 'center',
             marginTop: 'auto',
             marginBottom: 'auto',         
-            borderRadius: 15,
+            borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius,
             paddingHorizontal: '5%',
           
 
           },
         linearGradient: {
         padding: '2%',
-        borderRadius: 15,
+        borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius,
         },
         popUpHeader: {
             flexDirection: 'row',
@@ -135,9 +136,9 @@ export default function Login({
         },
         closeBtn: {
             borderWidth: 2,
-            borderColor: ' rgb(251,91,90)',
-            color: 'white',
-            borderRadius: 15,
+            borderColor: RefactoredStyles.colors.red,
+            color: RefactoredStyles.colors.white,
+            borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius,
             width: 30,
             height: 30,
             alignItems: 'center',
@@ -146,9 +147,9 @@ export default function Login({
         },
         closeBtnText: {
             textAlign: 'center',
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: 20,
+            color: RefactoredStyles.colors.white,
+            fontWeight: RefactoredStyles.fontWeight.exitText,
+            fontSize: RefactoredStyles.fontSize.exitText,
             marginBottom: 'auto',
             marginTop: 'auto',
 
@@ -158,22 +159,22 @@ export default function Login({
             marginLeft: 'auto',
             marginRight: 'auto',
             width: '100%',
-            fontSize: 20,
+            fontSize: RefactoredStyles.fontSize.subtitle,
             marginBottom: 20,
             textAlign: 'center',
-            color: 'white',
-            fontWeight: 'bold',
+            color: RefactoredStyles.colors.white,
+            fontWeight: RefactoredStyles.fontWeight.subtitle,
         },
         input: {
             margin: 'auto',
             width: 300,
             height: 40,
-            borderColor: 'gray',
-            borderRadius: 15,
+            borderColor: RefactoredStyles.colors.black,
+            borderRadius: RefactoredStyles.borderRadius.inputBorderRadius,
             borderWidth: 1,
             marginBottom: 10,
             padding: 8,
-            backgroundColor: 'white',
+            backgroundColor: RefactoredStyles.colors.white,
             marginRight: 'auto',
             marginLeft: 'auto',
           
@@ -183,8 +184,8 @@ export default function Login({
             margin: 'auto',
             width: 200,
             height: 40,
-            backgroundColor: 'rgb(70,88,129)',
-            borderRadius: 15,
+            backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,
+            borderRadius: RefactoredStyles.borderRadius.buttonBorderRadius,
             marginBottom: 10,
             padding: 8,
             alignItems: 'center',
@@ -193,9 +194,9 @@ export default function Login({
             marginLeft: 'auto',
         },
         buttonText: {
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: 15,
+            color: RefactoredStyles.colors.white,
+            fontWeight: RefactoredStyles.fontWeight.buttonText,
+            fontSize: RefactoredStyles.fontSize.buttonText,
         }
       });
 

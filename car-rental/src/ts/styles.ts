@@ -19,3 +19,39 @@ export const StylingDefaults = {
         header: 20,
     }
 }
+
+// Refacotred styles and colors (29/10/2023):
+export const RefactoredColors = {
+    turquoiseLightBlue: '#46B8B9',
+    turquoiseBaseBlue: '#467FB9',
+    turquoiseGreen: '#46B980',
+    white: '#FFFFFF',
+    black: '#000000',
+    red: '#FB5B5A'
+}
+export const RefactoredStyles = {
+    borderRadius: {
+        defaultBorderRadius: 15,
+        buttonBorderRadius: 10,
+        exitButtonBorderRadius: 15,
+        inputBorderRadius: 5,
+    },
+    iconSize: 40,
+    colors: RefactoredColors,
+    backgroundGradient: [RefactoredColors.turquoiseLightBlue, RefactoredColors.turquoiseBaseBlue, RefactoredColors.turquoiseGreen],
+    subGradient: [RefactoredColors.turquoiseGreen, RefactoredColors.turquoiseBaseBlue],
+    fontSize: {
+        title: 50,
+        subtitle: 20,
+        bodyText: 15,
+        exitText: 20,
+        buttonText: 15
+    },
+    fontWeight: {
+        title: 'default' as 'normal',
+        subtitle: 'bold' as 'bold',
+        bodyText: 'default' as 'normal',
+        exitText: 'bold' as 'bold',
+        buttonText: 'bold' as 'bold'
+    },
+}

@@ -1,12 +1,16 @@
-import React, { useMemo, useState } from 'react';
-import { Image, StyleSheet, View,TouchableOpacity, TextInput, Text, Modal, Button, Animated, ScrollView } from 'react-native';
-import { StylingDefaults } from '../ts/styles';
+import React, { useState } from 'react';
+import { Image, StyleSheet, View,TouchableOpacity, TextInput, Text, Modal, Animated, ScrollView } from 'react-native';
+import { RefactoredStyles, StylingDefaults } from '../ts/styles';
 import { SafeAreaView } from "react-native-safe-area-context";
 import Home from './Home';
 import Scan from './Scan';
-import { CarData, LicenseLocal, User } from '../ts/types';
+import { LicenseLocal, User } from '../ts/types';
 import storage, { KnownKeys } from "../ts/storage";
 import * as MediaLibrary from 'expo-media-library';
+import EmailComponent from '../components/EmailComponent';
+import PasswordComponent from '../components/PasswordComponent';
+import DateTimePicker from "@react-native-community/datetimepicker"
+
 
 export interface LicenseProps {
     setPage: (view: JSX.Element) => void;
@@ -17,53 +21,56 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
 
   const defaultLicense = require('./drivers-license-default.png');
 
-  const [expirationDate, setExpirationDate] = useState<string>('');
-  const [creationDate, setCreationDate] = useState<string>('');
-  const [surname, setSurname] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [nationality, setNationality] = useState<string>('');
-  const [cpr, setCpr] = useState<string>('');
-  const [id, setId] = useState<string>('');
+  const [expirationDate, setExpirationDate] = useState<Date | undefined>(new Date());
+  const [showExpirationDatePicker, setShowExpirationDatePicker] = useState(false);
+  const [creationDate, setCreationDate] = useState<Date |undefined>(new Date());
+  const [showCreationDatePicker, setShowCreationDatePicker] = useState(false);
+  const [surname, setSurname] = useState<string |undefined>('');
+  const [name, setName] = useState<string |undefined>('');
+  const [nationality, setNationality] = useState<string |undefined>('');
+  const [cpr, setCpr] = useState<string |undefined>('');
+  const [id, setId] = useState<string |undefined>('');
   const [isModalVisible, setIsModalVisible] = useState(true);
   const translateY = useState(new Animated.Value(0))[0];
-  const [email, setEmail] = useState<string|null>('');
-  const [changeEmail, isEmailView] = useState(false);
+  const [emailView, setEmailView] = useState(false);
+  const [passwordView, setPasswordView] = useState(false);
   const [licenseData, setLicenseData] = useState<LicenseLocal | undefined>();
   const [userData, setUserData] = useState<User>();
   const [licenseImage, setLicenseImage] = useState<MediaLibrary.Asset | undefined>();
 
-
+  
   React.useEffect(() => {
     const loadLicenseData = async () => {
-      try{
-        setUserData(await storage.load<User>({ key: KnownKeys.userData }));
-      }catch(error){
-        console.error('user not found')
-      }
       try {
-        setLicenseData(await storage.load<LicenseLocal>({ key: KnownKeys.licenseData }));
+        const loadedLicenseData = await storage.load<LicenseLocal>({ key: KnownKeys.licenseData });
+        console.log("loaded date are \n" + JSON.stringify(loadedLicenseData, null, 2));
+        setLicenseData(loadedLicenseData);
+        setExpirationDate(loadedLicenseData?.expirationDate);
+        setCreationDate(loadedLicenseData?.creationDate);
+        setSurname(loadedLicenseData?.surname);
+        setName(loadedLicenseData?.name);
+        setNationality(loadedLicenseData?.nationality);
+        setCpr(loadedLicenseData?.socialSecurityNumber);
+        setId(loadedLicenseData?.licenseId);
         const loadedImage = await storage.load<MediaLibrary.Asset>({ key: KnownKeys.licenseImage });
         setLicenseImage(loadedImage);
       } catch (error) {
         console.error(`Error loading image: ${error}`);
       }
     };
-    
     loadLicenseData();
   }, [])
-
-  const closeLicense = () => {
-    storage.save({key: KnownKeys.licenseData, data: {
-      expirationDate: expirationDate,
-      creationDate: creationDate,
-      surname: surname,
-      name: name,
-      nationality: nationality,
-      cpr: cpr,
-      id: id,
-      userId: userData?.id,
-      pictureUrl: licenseImage?.uri
-    }})
+  const loadUserData = async () => {
+    try{
+      setUserData(await storage.load<User>({ key: KnownKeys.userData }));
+    }catch(error){
+      console.error('user not found')
+    }
+  }
+  React.useEffect(() => {
+    loadUserData();
+  }, []);
+  const closeLicense = async () => {
     Animated.timing(translateY, {
       toValue: 1000, 
       duration: 100,
@@ -71,6 +78,22 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
     }).start(() => {
       setIsModalVisible(false);
     });
+  }
+
+  const saveLicenseDate = async () => {
+    storage.save({key: KnownKeys.licenseData, data: {
+      expirationDate: expirationDate,
+      creationDate: creationDate,
+      surname: surname,
+      name: name,
+      nationality: nationality,
+      socialSecurityNumber: cpr,
+      licenseId: id,
+      userId: userData?.id,
+      pictureUrl: licenseImage?.uri
+    }})
+    const loadedLicenseData = await storage.load<LicenseLocal>({ key: KnownKeys.licenseData });
+    console.log("saved date are \n" + JSON.stringify(loadedLicenseData, null, 2));
   }
 
   const openLicense = () => {
@@ -82,64 +105,108 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
     }).start();
   }
 
-  const changeEmailView = () => {
-    isEmailView(true);
-  }
+const toggleEmailView = (show: boolean) => {
+  setEmailView(show);
+  loadUserData();
+};
 
+const togglePasswordView = (show: boolean) => {
+  setPasswordView(show);
+  loadUserData();
+};
 
   return (
     <SafeAreaView style={styles.LicenseContainer} >
-             
       <Image
         style={licenseImage ? styles.imageStyle: styles.DefaultImageStyle}
         source={licenseImage ? { uri: licenseImage.uri } : defaultLicense}
       />
 
       <ScrollView style= {styles.driverLicensInputs}>
-        <TouchableOpacity style={styles.closeBtn} onPress= {openLicense}>
+        <TouchableOpacity style={styles.closeBtn} onPress={openLicense}>
                 <Text style={styles.closeBtnText}>X</Text>
         </TouchableOpacity> 
 
-        <TextInput
-          style={styles.input}
-          placeholder="Expiration Date"
-          onChangeText={(text) => setExpirationDate(text)}
-        />
+        <TouchableOpacity onPress={() => setShowExpirationDatePicker(true)}>
+          <TextInput
+            style={styles.input}
+            value={expirationDate?.toString()}
+            placeholder="Expiration Date"
+            editable={false}
+          />
+        </TouchableOpacity>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Creation Date"
-          onChangeText={(text) => setCreationDate(text)}
-        />
+        <TouchableOpacity onPress={() => setShowCreationDatePicker(true)}>
+          <TextInput
+            style={styles.input}
+            value={creationDate?.toString()}
+            placeholder="Creation Date"
+            editable={false}
+          />
+        </TouchableOpacity>
 
+        {showExpirationDatePicker && (
+          <DateTimePicker
+            value={new Date()}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={(event, selectedDate) => {
+              setShowExpirationDatePicker(false);
+              if (selectedDate) {
+                setExpirationDate(selectedDate);
+              }
+            }}
+          />
+        )}
+
+        {showCreationDatePicker && (
+          <DateTimePicker
+            value={new Date()}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={(event, selectedDate) => {
+              setShowCreationDatePicker(false);
+              if (selectedDate) {
+                setCreationDate(selectedDate);
+              }
+            }}
+          />
+        )}
         <TextInput
           style={styles.input}
+          value={surname}
           placeholder="Surname"
-          onChangeText={(text) => setSurname(text)}
+          onChangeText={setSurname}
         />
 
         <TextInput
           style={styles.input}
+          value={name}
           placeholder="Name"
-          onChangeText={(text) => setName(text)}
+          onChangeText={setName}
         />
 
         <TextInput
           style={styles.input}
+          value={nationality}
           placeholder="Nationality"
-          onChangeText={(text) => setNationality(text)}
+          onChangeText={setNationality}
         />
         
         <TextInput
           style={styles.input}
+          value={cpr}
           placeholder="CPR"
-          onChangeText={(text) => setCpr(text)}
+          onChangeText={setCpr}
         />
 
         <TextInput
           style={styles.input}
+          value={id}
           placeholder="ID"
-          onChangeText={(text) => setId(text)}
+          onChangeText={setId}
         />
       </ScrollView>
       <Modal
@@ -148,10 +215,10 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
         animationType="slide"
         style={styles.modalContainer}
       >
+        
         <View style={styles.modalContent}>
           <View style={styles.modalTitle}>
               <Text style={styles.modalTitleText}>
-                {/* get the username value */}
                 {userData?.username}
               </Text>
               <TouchableOpacity style={styles.modalCloseBtn} onPress={closeLicense}>
@@ -161,18 +228,23 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
               </TouchableOpacity>
           </View>
 
-          <View style={styles.informationContainer}>
-            <Text style={styles.informatonTxt}>Information</Text>
-            <View style={styles.drawLine}></View>
+        {emailView ? (
+        <EmailComponent closeEmailComponent={() => toggleEmailView(false)} />
+        ) : passwordView ? (
+        <PasswordComponent closePasswordComponent={() => togglePasswordView(false)} />
+        ) : (
+        <View style = {{ width:'100%' }}>
+         <View style={styles.informationContainer}>
+          <Text style={styles.informatonTxt}>Information</Text>
+          <View style={styles.drawLine}></View>
 
-            <View style={styles.emailContainer}>
-              <Text style={styles.emailTxt}>Email:</Text>
-              <View style={styles.drawBox}>
-                <Text>Emailvalue</Text>
-              </View>
+          <View style={styles.emailContainer}>
+            <Text style={styles.emailTxt}>Email:</Text>
+            <View style={styles.drawBox}>
+              <Text>{userData?.email}</Text>
             </View>
-
-            <View style={styles.usernameContainer}>
+          </View>
+          <View style={styles.usernameContainer}>
               <Text style={styles.usernameTxt}>Username:</Text>
               <View style={styles.drawBox}>
                 <Text>{userData?.username}</Text>
@@ -190,13 +262,13 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.settingsBtns}>
+              <TouchableOpacity style={styles.settingsBtns} onPress={() => setEmailView(true)}>
                 <Text style={styles.settingsBtnsTxt}>
                   Change email
                 </Text>
               </TouchableOpacity >
 
-              <TouchableOpacity style={styles.settingsBtns}>
+              <TouchableOpacity style={styles.settingsBtns} onPress={() => setPasswordView(true)}>
                 <Text style={styles.settingsBtnsTxt}>
                   Change Password
                 </Text>
@@ -208,10 +280,11 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
                 </Text>
               </TouchableOpacity>
           </View>
-
           <View style={styles.homePageAndLogOutContainer}>
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={()=>{
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp}/>);
+                    saveLicenseDate().then(() => {
+                      setPage(<Home setPage={setPage} setPopUp={setPopUp}/>);
+                    })
                 }}>
               <Text style={styles.homePageAndLogOutBtnsTxt}>
                 Home
@@ -219,14 +292,19 @@ export default function License({setPage,setPopUp}:LicenseProps): JSX.Element {
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.homePageAndLogOutBtns} onPress={() =>{
-                    setPage(<Home setPage={setPage} setPopUp={setPopUp} />);
+                    saveLicenseDate().then(() => {
+                      storage.save({key: KnownKeys.isLoggedIn, data: "false"})
+                      setPage(<Home setPage={setPage} setPopUp={setPopUp} />);
+                    })
+                    
                   }}>
               <Text style={styles.homePageAndLogOutBtnsTxt}>
                 Log Out
               </Text>
             </TouchableOpacity>
-
           </View>
+        </View>)}
+          
           
         </View>
       </Modal>
@@ -242,7 +320,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: StylingDefaults.colors.blueDark.hsl,
+    backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
     borderRadius: 15,
   },
   DefaultImageStyle: {
@@ -260,26 +338,26 @@ const styles = StyleSheet.create({
   
   driverLicensInputs: {
     width: '100%',
-    backgroundColor: StylingDefaults.colors.blueDark.hsl,
+    backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
   },
   input: {
     height: 40,
     margin: 11,
     borderWidth: 1,
-    borderRadius: 15,
-    backgroundColor: 'white',
+    borderRadius: RefactoredStyles.borderRadius.inputBorderRadius,
+    backgroundColor: RefactoredStyles.colors.white,
     padding: 10,
     width: '80%',
     alignSelf: 'center',
-    color: "black",
+    color: RefactoredStyles.colors.black,
   },
 
   closeBtn: {
     zIndex: 3,
     borderWidth: 2,
-    borderColor: ' rgb(251,91,90)',
-    color: 'white',
-    borderRadius: 15,
+    borderColor: RefactoredStyles.colors.red,
+    color: RefactoredStyles.colors.white,
+    borderRadius: RefactoredStyles.borderRadius.exitButtonBorderRadius,
     width: 30,
     height: 30,
     position: 'absolute',
@@ -290,9 +368,9 @@ const styles = StyleSheet.create({
   },
 
   closeBtnText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
+    color: RefactoredStyles.colors.white,
+    fontSize: RefactoredStyles.fontSize.bodyText,
+    fontWeight: RefactoredStyles.fontWeight.exitText,
   },
   modalContainer: {
     width: '100%',
@@ -305,7 +383,7 @@ const styles = StyleSheet.create({
     height: '90%',
     top : '12%',
     zIndex: 3,
-    backgroundColor: StylingDefaults.colors.blueDark.hsl,
+    backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
     borderRadius: 50,
     borderBottomEndRadius: 0,
     borderBottomStartRadius: 0,
@@ -321,23 +399,24 @@ const styles = StyleSheet.create({
     padding: '2%',
   },
   modalTitleText : {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
+    fontSize: RefactoredStyles.fontSize.title,
+    fontWeight: RefactoredStyles.fontWeight.title,
+    color: RefactoredStyles.colors.white,
     marginLeft: 'auto',
     marginRight: 'auto',
   },
   modalCloseBtn: {
     borderWidth: 2,
-    borderColor: ' rgb(251,91,90)',
-    color: 'white',
-    borderRadius: 15,
+    borderColor: RefactoredStyles.colors.red,
+    color: RefactoredStyles.colors.white,
+    fontWeight: RefactoredStyles.fontWeight.exitText,
+    borderRadius: RefactoredStyles.borderRadius.exitButtonBorderRadius,
     height: 30,
   },
   modalCloseBtnText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
+    color: RefactoredStyles.colors.white,
+    fontSize: RefactoredStyles.fontSize.exitText,
+    fontWeight: RefactoredStyles.fontWeight.exitText,
     margin : 'auto',
     width: 25,
     textAlign: 'center',
@@ -347,15 +426,15 @@ const styles = StyleSheet.create({
     padding: '2%',
   },
   informatonTxt: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
+    fontSize: RefactoredStyles.fontSize.subtitle,
+    fontWeight: RefactoredStyles.fontWeight.subtitle,
+    color: RefactoredStyles.colors.white,
     marginBottom: '2%',
   },
   drawLine: {
     width: '100%',
     height: 2,
-    backgroundColor: 'white',
+    backgroundColor: RefactoredStyles.colors.white,
     marginBottom: '5%',
   },
   emailContainer: {
@@ -366,17 +445,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   emailTxt: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 15,
+    color: RefactoredStyles.colors.white,
+    fontWeight: RefactoredStyles.fontWeight.bodyText,
+    fontSize: RefactoredStyles.fontSize.bodyText,
     marginRight: '2%',
     width: '20%',
 
   },
   drawBox: {
     width: '80%',
-    backgroundColor: StylingDefaults.colors.BlueAndGreen[1],
-    borderRadius: 15,
+    backgroundColor: RefactoredStyles.colors.white,
+    borderRadius: RefactoredStyles.borderRadius.inputBorderRadius,
     padding: '2%',
   },
   usernameContainer: {
@@ -387,9 +466,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   usernameTxt: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 15,
+    color: RefactoredStyles.colors.white,
+    fontWeight: RefactoredStyles.fontWeight.bodyText,
+    fontSize: RefactoredStyles.fontSize.bodyText,
     marginRight: '2%',
 
   },
@@ -398,15 +477,15 @@ const styles = StyleSheet.create({
     padding: '2%',
   },
   settingsBtns: {
-    backgroundColor: StylingDefaults.colors.test[0],
-    borderRadius: 15,
+    backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,
+    borderRadius: RefactoredStyles.borderRadius.buttonBorderRadius,
     padding: '3%',
     marginBottom: '3%',
   },
   settingsBtnsTxt: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 15,
+    color: RefactoredStyles.colors.white,
+    fontWeight: RefactoredStyles.fontWeight.buttonText,
+    fontSize: RefactoredStyles.fontSize.buttonText,
     textAlign: 'center',
   },
   homePageAndLogOutContainer: {
@@ -416,16 +495,16 @@ const styles = StyleSheet.create({
     padding: '2%',
   },
   homePageAndLogOutBtns: {
-    backgroundColor: StylingDefaults.colors.test[0],
-    borderRadius: 15,
+    backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,
+    borderRadius: RefactoredStyles.borderRadius.buttonBorderRadius,
     padding: '4%',
     marginTop: 'auto',
     width: '45%',
   },
   homePageAndLogOutBtnsTxt: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 15,
+    color: RefactoredStyles.colors.white,
+    fontWeight: RefactoredStyles.fontWeight.buttonText,
+    fontSize: RefactoredStyles.fontSize.buttonText,
     textAlign: 'center',
   },
 

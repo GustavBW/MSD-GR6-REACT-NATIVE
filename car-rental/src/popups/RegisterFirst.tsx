@@ -1,22 +1,40 @@
-import React, { useState, useRef } from "react";
-import { StylingDefaults } from '../ts/styles';
+import React, { useState, useRef, useEffect } from "react";
+import { RefactoredStyles, StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import RegisterSecond from "./RegisterSecond";
 import { SafeAreaView, TextInput, View,StyleSheet, Pressable, Text, Modal, Button, TouchableOpacity, Animated,} from "react-native"
+
 interface RegisterFirstProps {
     setPage: (view: JSX.Element) => void;
     setPopUp: (view: JSX.Element) => void;
+    usernameProp?: string,
+    emailProp?: string,
+    passwordProp?: string,
+    repeatPasswordProp?: string
+    addressProp?: string,
+    tosProp?: boolean,
+    newsLetterProp?: boolean
 }
+
 
 export default function RegisterFirst({
     setPage,
     setPopUp,
+    usernameProp = "",
+    emailProp = "",
+    passwordProp = "",
+    repeatPasswordProp = "",
+    addressProp,
+    tosProp,
+    newsLetterProp
+    
 }: RegisterFirstProps
 
 ) : JSX.Element {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [retypedPassword, setRetypedPassword] = useState("");
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [repeatPassword, setRepeatPassword] = useState<string>("");
     const [modalVisible, setModalVisible] = useState(true);
     const translateY = useRef(new Animated.Value(0)).current;
     const closeRegister = () => {
@@ -29,6 +47,13 @@ export default function RegisterFirst({
           setPopUp(<></>);
         });
       };
+    useEffect(() => {
+      setUsername(usernameProp);
+      setEmail(emailProp);
+      setPassword(passwordProp);
+      setRepeatPassword(repeatPasswordProp);
+    }, [usernameProp, emailProp, passwordProp, repeatPasswordProp]);
+
     
     return (
       
@@ -40,7 +65,7 @@ export default function RegisterFirst({
                 styles.modal}
             >
             <LinearGradient
-                colors={StylingDefaults.colors.BlueAndGreen}
+                colors={RefactoredStyles.subGradient}
                 style={styles.linearGradient}
               >
               <View style={styles.popUpHeader}>
@@ -54,23 +79,34 @@ export default function RegisterFirst({
               <TextInput
                 style={styles.input}
                 placeholder="Username"
+                value={username}
                 onChangeText={(text) => setUsername(text)}
+              />
+              <TextInput
+                style={styles.input}                
+                placeholder="email"
+                value={email}
+                onChangeText={(text) => setEmail(text)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Password"
+                value={password}
                 secureTextEntry={true}
                 onChangeText={(text) => setPassword(text)}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Repeat Password"
+                value={repeatPassword}
                 secureTextEntry={true}
-                onChangeText={(text) => setRetypedPassword(text)}
+                onChangeText={(text) => setRepeatPassword(text)}
               />
   
               <TouchableOpacity style={styles.button} onPress={()=>{
-                    setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp}/>)
+                    if (username && email && password && password == repeatPassword ) {
+                      setPopUp(<RegisterSecond setPage={setPage} setPopUp={setPopUp} usernameProp={username} emailProp={email} passwordProp={password} repeatPasswordProp={repeatPassword} addressProp={addressProp} newsLetterProp={newsLetterProp} tosProp={tosProp}/>)
+                    }  
                 }}>
                 <Text style={styles.buttonText}>Register</Text>
               </TouchableOpacity>
@@ -92,14 +128,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 'auto',
         marginBottom: 'auto',         
-        borderRadius: 15,
+        borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius,
         paddingHorizontal: '5%',
       
 
       },
     linearGradient: {
     padding: '2%',
-    borderRadius: 15,
+    borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius,
     },
     popUpHeader: {
         flexDirection: 'row',
@@ -111,9 +147,9 @@ const styles = StyleSheet.create({
     },
     closeBtn: {
         borderWidth: 2,
-        borderColor: ' rgb(251,91,90)',
-        color: 'white',
-        borderRadius: 15,
+        borderColor: RefactoredStyles.colors.red,
+        color: RefactoredStyles.colors.white,
+        borderRadius: RefactoredStyles.borderRadius.exitButtonBorderRadius,
         width: 30,
         height: 30,
         alignItems: 'center',
@@ -122,9 +158,9 @@ const styles = StyleSheet.create({
     },
     closeBtnText: {
         textAlign: 'center',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 20,
+        color: RefactoredStyles.colors.white,
+        fontWeight: RefactoredStyles.fontWeight.exitText,
+        fontSize: RefactoredStyles.fontSize.exitText,
         marginBottom: 'auto',
         marginTop: 'auto',
 
@@ -134,22 +170,22 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto',
         width: '100%',
-        fontSize: 20,
+        fontSize: RefactoredStyles.fontSize.subtitle,
         marginBottom: 20,
         textAlign: 'center',
-        color: 'white',
-        fontWeight: 'bold',
+        color: RefactoredStyles.colors.white,
+        fontWeight: RefactoredStyles.fontWeight.subtitle,
     },
     input: {
         margin: 'auto',
         width: 300,
         height: 40,
-        borderColor: 'gray',
-        borderRadius: 15,
+        borderColor: RefactoredStyles.colors.black,
+        borderRadius: RefactoredStyles.borderRadius.inputBorderRadius,
         borderWidth: 1,
         marginBottom: 10,
         padding: 8,
-        backgroundColor: 'white',
+        backgroundColor: RefactoredStyles.colors.white,
         marginRight: 'auto',
         marginLeft: 'auto',
       
@@ -159,8 +195,8 @@ const styles = StyleSheet.create({
         margin: 'auto',
         width: 200,
         height: 40,
-        backgroundColor: 'rgb(70,88,129)',
-        borderRadius: 15,
+        backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,
+        borderRadius: RefactoredStyles.borderRadius.buttonBorderRadius,
         marginBottom: 10,
         padding: 8,
         alignItems: 'center',
@@ -169,8 +205,8 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
     },
     buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 15,
+        color: RefactoredStyles.colors.white,
+        fontWeight: RefactoredStyles.fontWeight.buttonText,
+        fontSize: RefactoredStyles.fontSize.buttonText,
     }
   });

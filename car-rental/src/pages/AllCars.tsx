@@ -1,6 +1,6 @@
 import React from  'react';
 import { StyleSheet, View, Text, Pressable, ScrollView, FlatList } from 'react-native';
-import { StylingDefaults } from '../ts/styles';
+import { RefactoredColors, RefactoredStyles, StylingDefaults } from '../ts/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CarData } from '../ts/types';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -44,7 +44,7 @@ export default function AllCars({cars, setPage, setPopUp}: AllCars){
                 </View>
                 <View style={styles.xButtonSpacer}>
                     <Pressable onPress={() => setPage(<Home setPage={setPage} setPopUp={setPopUp}/>)}>
-                        <FontAwesomeIcon icon={faCircleXmark} size={60} color="black" />
+                        <FontAwesomeIcon icon={faCircleXmark} size={60} color="white" />
                     </Pressable>
                 </View>
             </View>
@@ -58,12 +58,12 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: StylingDefaults.colors.blueDark.hsl,
+        backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
     },
     pageTitle: {
-        fontSize: StylingDefaults.fontSize.title,
+        fontSize: RefactoredStyles.fontSize.title,
         padding: 30,
-        color: "white",
+        color: RefactoredStyles.colors.white,
         textAlign: "center",
     },
 
@@ -96,9 +96,9 @@ const styles = StyleSheet.create({
         borderEndStartRadius: 0,
     },
     tableHeaderText: {
-        color: "white",
-        fontSize: 20,
-        fontWeight: "bold",
+        color: RefactoredStyles.colors.white,
+        fontSize: RefactoredStyles.fontSize.subtitle,
+        fontWeight: RefactoredStyles.fontWeight.subtitle,
     },
     xButtonSpacer: {
         width: "15%",
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "90%",
         backgroundColor: "transparent",
-        borderRadius: 10,
+        borderRadius: RefactoredStyles.borderRadius.buttonBorderRadius,
         overflow: "scroll",
     },
     tableRow: {
@@ -120,11 +120,12 @@ const styles = StyleSheet.create({
         width: "100%",
         padding: "5%",
         marginBottom: "5%",
-        backgroundColor: "hsl(290, 80%, 30%)",
-        borderRadius: 10,
+        backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,
+        borderRadius: RefactoredStyles.borderRadius.buttonBorderRadius,
     },
     tableRowText: {
-        color: "white",
-        fontSize: 20,
+        color: RefactoredStyles.colors.white,
+        fontSize: RefactoredStyles.fontSize.buttonText,
+        fontWeight: RefactoredStyles.fontWeight.buttonText,
     }
 });

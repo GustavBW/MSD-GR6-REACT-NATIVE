@@ -5,7 +5,8 @@ export const KnownKeys = {
   carData: 'car-data',
   userData: 'user-data',
   licenseData: 'license-data',
-  licenseImage: 'license-image'
+  licenseImage: 'license-image',
+  isLoggedIn: 'is-logged-in',
 }
 
 const storage = new Storage({
