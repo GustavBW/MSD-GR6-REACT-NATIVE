@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, Text, View, Keyboard, TextInput } from 'react-native';
 import { RefactoredStyles, StylingDefaults } from '../ts/styles';
-import { CarData } from '../ts/types';
+import { CarData, LicenseLocal } from '../ts/types';
 import { TouchableOpacity } from 'react-native';
 import Scan from './Scan';
 import Home from './Home';
 import Car from '../popups/Car';
 import PaymentSecond from './PaymentSecond';
+import storage, { KnownKeys } from "../ts/storage";
 
 export interface PaymentProps {
     setPage: (view: JSX.Element) => void;
@@ -16,6 +17,21 @@ export interface PaymentProps {
 
 export default function PaymentFirst({setPage, setPopUp, car}: PaymentProps): JSX.Element {
     const [email, setEmail] = React.useState("email");
+
+    const validateDriverLicense = async () => {
+          const loadedLicenseData = await storage.load<LicenseLocal>({ key: KnownKeys.licenseData });
+          if(loadedLicenseData.pictureUrl){
+            return true;
+          }
+          for (const key in loadedLicenseData){
+            if (loadedLicenseData[key as keyof LicenseLocal] === ""){
+                return false;
+            }
+          }
+          
+          return true;
+          
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -43,8 +59,10 @@ export default function PaymentFirst({setPage, setPopUp, car}: PaymentProps): JS
                     }}>
                         <Text style={styles.buttonText}>Cancel</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => {
-                        setPage(<PaymentSecond setPopUp={setPopUp} setPage={setPage} car={car} email={email}/>)
+                    <TouchableOpacity style={styles.button} onPress={async () => {
+                        if(await validateDriverLicense()){
+                            setPage(<PaymentSecond setPopUp={setPopUp} setPage={setPage} car={car} email={email}/>)
+                        }
                     }}>
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>

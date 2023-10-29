@@ -37,7 +37,7 @@ export default function App() {
       if(!localFound){
         console.log("No data available locally, fetching from server")
         try{
-          serverData = await fetch('http://192.168.0.167:3000/car-data');
+          serverData = await fetch('http://192.168.0.210:3000/car-data');
         }catch(networkError){
           console.log("Error fetching data from server: \n", networkError)
           console.log((networkError as Error).stack);
