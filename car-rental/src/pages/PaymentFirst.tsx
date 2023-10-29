@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, Text, View, Keyboard, TextInput } from 'react-native';
 import { StylingDefaults } from '../ts/styles';
 import { CarData } from '../ts/types';
-import { TouchableOpacity } from '@gorhom/bottom-sheet';
+import { TouchableOpacity } from 'react-native';
 import Scan from './Scan';
 import Home from './Home';
 import Car from '../popups/Car';
