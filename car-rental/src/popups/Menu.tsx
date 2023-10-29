@@ -4,7 +4,7 @@ import { Button, Icon } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import {faCarSide, faCircleInfo, faPhone, faFileInvoiceDollar, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
-import { StylingDefaults } from '../ts/styles';
+import { RefactoredStyles, StylingDefaults } from '../ts/styles';
 import AllCars from "../pages/AllCars";
 import { CarData } from "../ts/types";
 
@@ -18,30 +18,30 @@ export function Menu({setPage, setPopUp, cars}: MenuProps){
     return(
         <View style={styles.container}>
         <Modal animationType="slide"  transparent={true}>
-            <LinearGradient colors={[StylingDefaults.colors.blueBase.hsl, StylingDefaults.colors.blueDark.hsl]} style={styles.modal}>
+            <LinearGradient colors={RefactoredStyles.subGradient} style={styles.modal}>
                 <View style={styles.closeButton}>
                     <Pressable onPress={()=>setPopUp(<></>)}>
-                        <FontAwesomeIcon icon={faCircleXmark} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                        <FontAwesomeIcon icon={faCircleXmark} size={RefactoredStyles.iconSize} color={RefactoredStyles.colors.white}/>
                     </Pressable>
                 </View> 
                 <View style={styles.row}>
                     <Pressable style={styles.button} onPress={() => setPage(<AllCars setPage={setPage} setPopUp={setPopUp} cars={cars}/>)}>
-                        <FontAwesomeIcon icon={faCarSide} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                        <FontAwesomeIcon icon={faCarSide} size={RefactoredStyles.iconSize} color={RefactoredStyles.colors.white}/>
                         <Text style={styles.modalText}>All Cars</Text>
                     </Pressable>
                     <Pressable style={styles.button}>
-                        <FontAwesomeIcon icon={faFileInvoiceDollar} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                        <FontAwesomeIcon icon={faFileInvoiceDollar} size={RefactoredStyles.iconSize} color={RefactoredStyles.colors.white}/>
                         <Text style={styles.modalText}>Invoices</Text>
                     </Pressable>                
                 </View>
                 {/* Bottom row */}
                 <View style={styles.row}>
                     <Pressable style={styles.button}>
-                        <FontAwesomeIcon icon={faCircleInfo} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                        <FontAwesomeIcon icon={faCircleInfo} size={RefactoredStyles.iconSize} color={RefactoredStyles.colors.white}/>
                         <Text style={styles.modalText}>Info</Text>
                     </Pressable>                    
                     <Pressable style={styles.button}>
-                        <FontAwesomeIcon icon={faPhone} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl}/>
+                        <FontAwesomeIcon icon={faPhone} size={RefactoredStyles.iconSize} color={RefactoredStyles.colors.white}/>
                         <Text style={styles.modalText}>Support</Text>
                     </Pressable>                
                 </View>
@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
         width: '70%',
         padding: 20,
         top: "40%",
-        alignSelf: "center"
+        alignSelf: "center",
+        borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius,
     },
     row: {
         flexDirection: 'row',
@@ -84,9 +85,9 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'    
     },
     modalText: {
-        fontSize: 20,
-        color: 'white',
-        fontWeight: 'bold',
+        fontSize: RefactoredStyles.fontSize.subtitle,
+        color: RefactoredStyles.colors.white,
+        fontWeight: RefactoredStyles.fontWeight.subtitle,
     },
     button: {
         width: '100%',

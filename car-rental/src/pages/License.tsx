@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Image, StyleSheet, View,TouchableOpacity, TextInput, Text, Modal, Animated, ScrollView } from 'react-native';
-import { StylingDefaults } from '../ts/styles';
+import { RefactoredStyles, StylingDefaults } from '../ts/styles';
 import { SafeAreaView } from "react-native-safe-area-context";
 import Home from './Home';
 import Scan from './Scan';
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: StylingDefaults.colors.blueDark.hsl,
+    backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
     borderRadius: 15,
   },
   DefaultImageStyle: {
@@ -338,26 +338,26 @@ const styles = StyleSheet.create({
   
   driverLicensInputs: {
     width: '100%',
-    backgroundColor: StylingDefaults.colors.blueDark.hsl,
+    backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
   },
   input: {
     height: 40,
     margin: 11,
     borderWidth: 1,
-    borderRadius: 15,
-    backgroundColor: 'white',
+    borderRadius: RefactoredStyles.borderRadius.inputBorderRadius,
+    backgroundColor: RefactoredStyles.colors.white,
     padding: 10,
     width: '80%',
     alignSelf: 'center',
-    color: "black",
+    color: RefactoredStyles.colors.black,
   },
 
   closeBtn: {
     zIndex: 3,
     borderWidth: 2,
-    borderColor: ' rgb(251,91,90)',
-    color: 'white',
-    borderRadius: 15,
+    borderColor: RefactoredStyles.colors.red,
+    color: RefactoredStyles.colors.white,
+    borderRadius: RefactoredStyles.borderRadius.exitButtonBorderRadius,
     width: 30,
     height: 30,
     position: 'absolute',
@@ -368,9 +368,9 @@ const styles = StyleSheet.create({
   },
 
   closeBtnText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
+    color: RefactoredStyles.colors.white,
+    fontSize: RefactoredStyles.fontSize.bodyText,
+    fontWeight: RefactoredStyles.fontWeight.exitText,
   },
   modalContainer: {
     width: '100%',
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     height: '90%',
     top : '12%',
     zIndex: 3,
-    backgroundColor: StylingDefaults.colors.blueDark.hsl,
+    backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
     borderRadius: 50,
     borderBottomEndRadius: 0,
     borderBottomStartRadius: 0,
@@ -399,23 +399,24 @@ const styles = StyleSheet.create({
     padding: '2%',
   },
   modalTitleText : {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
+    fontSize: RefactoredStyles.fontSize.title,
+    fontWeight: RefactoredStyles.fontWeight.title,
+    color: RefactoredStyles.colors.white,
     marginLeft: 'auto',
     marginRight: 'auto',
   },
   modalCloseBtn: {
     borderWidth: 2,
-    borderColor: ' rgb(251,91,90)',
-    color: 'white',
-    borderRadius: 15,
+    borderColor: RefactoredStyles.colors.red,
+    color: RefactoredStyles.colors.white,
+    fontWeight: RefactoredStyles.fontWeight.exitText,
+    borderRadius: RefactoredStyles.borderRadius.exitButtonBorderRadius,
     height: 30,
   },
   modalCloseBtnText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
+    color: RefactoredStyles.colors.white,
+    fontSize: RefactoredStyles.fontSize.exitText,
+    fontWeight: RefactoredStyles.fontWeight.exitText,
     margin : 'auto',
     width: 25,
     textAlign: 'center',
@@ -425,15 +426,15 @@ const styles = StyleSheet.create({
     padding: '2%',
   },
   informatonTxt: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
+    fontSize: RefactoredStyles.fontSize.subtitle,
+    fontWeight: RefactoredStyles.fontWeight.subtitle,
+    color: RefactoredStyles.colors.white,
     marginBottom: '2%',
   },
   drawLine: {
     width: '100%',
     height: 2,
-    backgroundColor: 'white',
+    backgroundColor: RefactoredStyles.colors.white,
     marginBottom: '5%',
   },
   emailContainer: {
@@ -444,17 +445,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   emailTxt: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 15,
+    color: RefactoredStyles.colors.white,
+    fontWeight: RefactoredStyles.fontWeight.bodyText,
+    fontSize: RefactoredStyles.fontSize.bodyText,
     marginRight: '2%',
     width: '20%',
 
   },
   drawBox: {
     width: '80%',
-    backgroundColor: StylingDefaults.colors.BlueAndGreen[1],
-    borderRadius: 15,
+    backgroundColor: RefactoredStyles.colors.white,
+    borderRadius: RefactoredStyles.borderRadius.inputBorderRadius,
     padding: '2%',
   },
   usernameContainer: {
@@ -465,9 +466,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   usernameTxt: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 15,
+    color: RefactoredStyles.colors.white,
+    fontWeight: RefactoredStyles.fontWeight.bodyText,
+    fontSize: RefactoredStyles.fontSize.bodyText,
     marginRight: '2%',
 
   },
@@ -476,15 +477,15 @@ const styles = StyleSheet.create({
     padding: '2%',
   },
   settingsBtns: {
-    backgroundColor: StylingDefaults.colors.test[0],
-    borderRadius: 15,
+    backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,
+    borderRadius: RefactoredStyles.borderRadius.buttonBorderRadius,
     padding: '3%',
     marginBottom: '3%',
   },
   settingsBtnsTxt: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 15,
+    color: RefactoredStyles.colors.white,
+    fontWeight: RefactoredStyles.fontWeight.buttonText,
+    fontSize: RefactoredStyles.fontSize.buttonText,
     textAlign: 'center',
   },
   homePageAndLogOutContainer: {
@@ -494,16 +495,16 @@ const styles = StyleSheet.create({
     padding: '2%',
   },
   homePageAndLogOutBtns: {
-    backgroundColor: StylingDefaults.colors.test[0],
-    borderRadius: 15,
+    backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,
+    borderRadius: RefactoredStyles.borderRadius.buttonBorderRadius,
     padding: '4%',
     marginTop: 'auto',
     width: '45%',
   },
   homePageAndLogOutBtnsTxt: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 15,
+    color: RefactoredStyles.colors.white,
+    fontWeight: RefactoredStyles.fontWeight.buttonText,
+    fontSize: RefactoredStyles.fontSize.buttonText,
     textAlign: 'center',
   },
 

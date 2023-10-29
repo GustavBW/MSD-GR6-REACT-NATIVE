@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Animated, Image, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StylingDefaults } from '../ts/styles';
+import { RefactoredStyles, StylingDefaults } from '../ts/styles';
 
 export default function Splash({ error }: { error: Error | null }): JSX.Element {
 
@@ -18,7 +18,7 @@ export default function Splash({ error }: { error: Error | null }): JSX.Element 
     return (
         <View style={styles.container}>
             <LinearGradient 
-                 colors={[StylingDefaults.colors.blueBase.hsl, StylingDefaults.colors.greenBase.hsl]}
+                 colors={RefactoredStyles.backgroundGradient}
                  style={{...StyleSheet.absoluteFillObject, zIndex: -1}}
             />
             <Image source={require('./icon.png')} 
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     title: {
-        fontSize: StylingDefaults.fontSize.title,
+        fontSize: RefactoredStyles.fontSize.title,
         textAlign: "center",
         padding: "10%"
     },
