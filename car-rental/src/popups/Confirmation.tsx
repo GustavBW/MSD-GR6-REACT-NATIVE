@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { DimensionValue, Image, Pressable, StyleSheet, SafeAreaView, Text, View, Keyboard, Modal, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StylingDefaults } from '../ts/styles';
+import { RefactoredStyles, StylingDefaults } from '../ts/styles';
 import { CarData } from '../ts/types';
 import Home from '../pages/Home';
 
@@ -16,7 +16,7 @@ export default function Confirmation({setPage, setPopUp, car}: ConfirmationProps
     return (
         <View>
             <Modal animationType="slide"  transparent={true}>
-                <LinearGradient colors={[StylingDefaults.colors.blueBase.hsl, StylingDefaults.colors.blueDark.hsl]} style={styles.modal}>   
+                <LinearGradient colors={RefactoredStyles.subGradient} style={styles.modal}>   
                     <View>
                         {/* Car name */}
                         <Text style={styles.modalHeader}>{car.manufacturer} {car.model}</Text>
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
         width: '70%',
         padding: 10,
         top: "40%",
-        alignSelf: "center"
+        alignSelf: "center",
+        borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius,
     },
     row: {
         flexDirection: 'row',
@@ -69,21 +70,21 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     modalText: {
-        fontSize: 20,
-        color: 'white',
-        fontWeight: 'bold',
+        fontSize: RefactoredStyles.fontSize.bodyText,
+        color: RefactoredStyles.colors.white,
+        fontWeight: RefactoredStyles.fontWeight.bodyText,
     },
     modalHeader: {
-        fontSize: 30,
-        color: 'white',
-        fontWeight: 'bold',
+        fontSize: RefactoredStyles.fontSize.subtitle,
+        color: RefactoredStyles.colors.white,
+        fontWeight: RefactoredStyles.fontWeight.subtitle,
     },
     button: {
         margin: 'auto',
             width: 100,
             height: 40,
-            backgroundColor: 'rgb(70,88,129)',
-            borderRadius: 15,
+            backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,
+            borderRadius: RefactoredStyles.borderRadius.buttonBorderRadius,
             marginBottom: 10,
             padding: 8,
             alignItems: 'center',

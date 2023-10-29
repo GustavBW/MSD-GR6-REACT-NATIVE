@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { TouchableOpacity, Image, Pressable, StyleSheet, SafeAreaView, TextInput, View, Keyboard } from 'react-native';
-import { StylingDefaults } from '../ts/styles';
+import { RefactoredStyles, StylingDefaults } from '../ts/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faBars, faCarSide } from '@fortawesome/free-solid-svg-icons'
 import { CarData, User } from '../ts/types';
@@ -66,7 +66,7 @@ export default function Home({setPage, setPopUp, selectedCar}: HomeProps): JSX.E
                         setPopUp(<Menu cars={cars} setPopUp={setPopUp} setPage={setPage}/>)
                     }}
                 >
-                    <FontAwesomeIcon icon={faBars} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
+                    <FontAwesomeIcon icon={faBars} size={RefactoredStyles.iconSize} color={RefactoredStyles.colors.white} />
                 </TouchableOpacity>
 
                 <TextInput
@@ -97,7 +97,7 @@ export default function Home({setPage, setPopUp, selectedCar}: HomeProps): JSX.E
                         }
                     }}
                 >                    
-                    <FontAwesomeIcon icon={faUser} size={StylingDefaults.iconSize} color={StylingDefaults.colors.blueBase.hsl} />
+                    <FontAwesomeIcon icon={faUser} size={RefactoredStyles.iconSize} color={RefactoredStyles.colors.white} />
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
       alignItems: 'center', // Center items vertically
       width: "100%",
       zIndex: 1,
-      backgroundColor: StylingDefaults.colors.blueDark.hsl,
+      backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
     },
     iconButton: {
       flex: 1, // Each button takes up equal space horizontally
@@ -142,15 +142,15 @@ const styles = StyleSheet.create({
       borderWidth: 1, // Add border for the input
       width: "90%",
       height: "66%",
-      borderColor: 'black', // Border color
-      borderRadius: StylingDefaults.borderRadius, // Rounded corners for the input
-      backgroundColor: StylingDefaults.colors.blueBase.hsl, // White background for the input
+      borderColor: RefactoredStyles.colors.black, // Border color
+      borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius, // Rounded corners for the input
+      backgroundColor: RefactoredStyles.colors.white, // White background for the input
       textAlign: 'center', // Center text horizontally,
       alignItems: 'center', // Center text vertically
     },
     inputWhenFocused: {
         bottom: "100%",
-        shadowColor: StylingDefaults.colors.blueDark.hsl,
+        shadowColor: RefactoredStyles.colors.turquoiseBaseBlue,
         shadowOffset: {
             width: 0,
             height: 0
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         shadowRadius: 30,
         elevation: 5,
-        backgroundColor: StylingDefaults.colors.blueBase.hsl,
+        backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
         width: "100%",
     }
   });
