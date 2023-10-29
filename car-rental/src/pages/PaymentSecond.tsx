@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUser, faCreditCard, faCarSide } from '@fortawesome/free-solid-svg-icons'
 import { faPaypal } from "@fortawesome/free-brands-svg-icons"
 import Car from '../popups/Car';
-import { StylingDefaults } from '../ts/styles';
+import { RefactoredColors, RefactoredStyles, StylingDefaults } from '../ts/styles';
 import Confirmation from '../popups/Confirmation';
 
 export interface PaymentProps {
@@ -76,25 +76,25 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: StylingDefaults.colors.blueDark.hsl,
+        backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
     },
     pageTitle: {
-        fontSize: StylingDefaults.fontSize.title,
+        fontSize: RefactoredStyles.fontSize.title,
         padding: 10,
-        color: "white",
+        color: RefactoredStyles.colors.white,
         textAlign: "center",
     },
     subTitle: {
-        fontSize: StylingDefaults.fontSize.subTitle,
+        fontSize: RefactoredStyles.fontSize.subtitle,
         padding: 20,
-        color: "white",
+        color: RefactoredStyles.colors.white,
         textAlign: "center",
     
     },
     header: {
-        fontSize: StylingDefaults.fontSize.header,
+        fontSize: RefactoredStyles.fontSize.title,
         padding: 10,
-        color: "white",
+        color: RefactoredStyles.colors.white,
         textAlign: "left",
         width: "100%",
     },
@@ -110,25 +110,25 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         padding: 10,
-        backgroundColor: StylingDefaults.colors.blueDark.hsl,
+        backgroundColor: RefactoredStyles.colors.turquoiseBaseBlue,
     },
     input: {
         width: "100%",
         height: 50,
-        borderColor: 'gray',
-        borderRadius: 5,
+        borderColor: RefactoredStyles.colors.black,
+        borderRadius: RefactoredStyles.borderRadius.inputBorderRadius,
         borderWidth: 1,
         padding: 10,
         margin: 10,
-        backgroundColor: 'white',
+        backgroundColor: RefactoredStyles.colors.white,
         textAlign: "center"
     },
     button: {
         margin: 5,
         width: "100%",
         height: 40,
-        borderRadius: 5,
-        backgroundColor: StylingDefaults.colors.blueBase.hsl,
+        borderRadius: RefactoredStyles.borderRadius.buttonBorderRadius,
+        backgroundColor: RefactoredStyles.colors.turquoiseLightBlue,
         padding: 8,
         alignItems: 'center',
         justifyContent: 'center'
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         width: "50%",
         height: "10%",
         backgroundColor: "transparent",
-        borderRadius: 10,
+        borderRadius: RefactoredStyles.borderRadius.defaultBorderRadius,
         bottom: 0,
     },
     
