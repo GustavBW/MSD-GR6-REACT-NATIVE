@@ -28,7 +28,6 @@ export default function PaymentSecond({setPage, setPopUp, car, email}: PaymentPr
                 <TextInput
                         style={styles.input}
                         placeholder="Destination"
-                        secureTextEntry={true}
                         onChangeText={(text) => setDestination(text)}
                     />
                 <Text style={styles.header}>Payment Method</Text>
