@@ -43,7 +43,6 @@ export default function PaymentFirst({setPage, setPopUp, car}: PaymentProps): JS
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
-                    secureTextEntry={true}
                     onChangeText={(text) => setEmail(text)}
                 />
                 <TouchableOpacity style={styles.button} onPress={() => {
